@@ -63,11 +63,11 @@ import static spark.Spark.halt;
                 Map addRequest = gson.fromJson(request.body(), Map.class);
                 Misura misura = null;
                 // check whether everything is in place
-                if(addRequest!=null && addRequest.containsKey("tipo") && addRequest.containsKey("misurazione") && addRequest.containsKey("data") && addRequest.containsKey("sensore_id")) {
+                if(addRequest!=null && addRequest.containsKey("tipo") && addRequest.containsKey("misurazione") && addRequest.containsKey("data") && addRequest.containsKey("sensoreId")) {
                     String tipo = String.valueOf(addRequest.get("tipo"));
                     String misurazione = String.valueOf(addRequest.get("misurazione"));
                     Timestamp data = Timestamp.valueOf(String.valueOf(addRequest.get("data")));
-                    int sensore_id = Integer.parseInt(String.valueOf(addRequest.get("sensore_id")));
+                    int sensore_id = Integer.parseInt(String.valueOf(addRequest.get("sensoreId")));
 
                     // add the task into the DB
                     misura = new Misura(tipo, misurazione, data,sensore_id);

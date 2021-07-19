@@ -30,8 +30,7 @@ public class GestionePrenotazione {
 
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()) {
-
+            while(rs.next()) {
                 Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
@@ -44,20 +43,19 @@ public class GestionePrenotazione {
         return reservations;
     }
 
-    public List<Prenotazione> getAllReservationsUser(String utente_id) {
-        final String sql = "SELECT id, descrizione, data , ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id=?";
+    public List<Prenotazione> getAllReservationsUser(String utenteId) {
+        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id=?";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, utente_id);
+            st.setString(1, utenteId);
 
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()) {
-
+            while(rs.next()) {
                 Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
@@ -70,6 +68,29 @@ public class GestionePrenotazione {
         return reservations;
     }
 
+    public Prenotazione getReservationUser(String utenteId, )
+    {
+        Prenotazione Reservation = null;
+        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE id = ?";
+
+        try {
+            Connection conn = DBConnect.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, id);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Reservation = new Prenotazione(id, rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Reservation;
+    }
 
 
     /**

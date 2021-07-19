@@ -2,11 +2,10 @@ package RESTService;
 
 import com.google.gson.Gson;
 import tasks.Prenotazione;
-import tasks.Slot;
+import taskModelsJSGrid.Slot;
 import tasksDao.GestionePrenotazione;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -74,14 +73,14 @@ public class RESTPrenotazione {
                 Map addRequest = gson.fromJson(request.body(), Map.class);
                 Prenotazione prenotazione = null;
                 // check whether everything is in place
-                if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("data") && addRequest.containsKey("ora_inizio") && addRequest.containsKey("ora_fine") && addRequest.containsKey("clienti") && addRequest.containsKey("ufficio_id") && addRequest.containsKey("utente_id")) {
+                if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("data") && addRequest.containsKey("oraInizio") && addRequest.containsKey("oraFine") && addRequest.containsKey("clienti") && addRequest.containsKey("ufficioId") && addRequest.containsKey("utenteId")) {
                     String descrizione = String.valueOf(addRequest.get("descrizione"));
                     Date data = Date.valueOf(String.valueOf(addRequest.get("data")));
-                    int oraInizio = Integer.valueOf(String.valueOf(addRequest.get("ora_inizio")));
-                    int oraFine = Integer.valueOf(String.valueOf(addRequest.get("ora_fine")));
+                    int oraInizio = Integer.valueOf(String.valueOf(addRequest.get("oraInizio")));
+                    int oraFine = Integer.valueOf(String.valueOf(addRequest.get("oraFine")));
                     int clienti = Integer.parseInt(String.valueOf(addRequest.get("clienti")));
-                    int ufficio_id = Integer.parseInt(String.valueOf(addRequest.get("ufficio_id")));
-                    String utente_id = String.valueOf(addRequest.get("utente_id"));
+                    int ufficio_id = Integer.parseInt(String.valueOf(addRequest.get("ufficioId")));
+                    String utente_id = String.valueOf(addRequest.get("utenteId"));
 
                     // add the task into the DB
                     prenotazione = new Prenotazione(descrizione, data, oraInizio, oraFine, clienti, ufficio_id,utente_id);
@@ -140,15 +139,37 @@ public class RESTPrenotazione {
                     if(date == startDate) date = date.plusDays(1);
 
                     for (int hour=nowHour; hour<finalHour; hour++){
-                        if(contains(hour, startTimes, finalTimes))
-                            slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), false));
-                        else
+                        if(!contains(hour, startTimes, finalTimes)) // Lo slot è libero
                             slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), true));
                     }
                     date = date.plusDays(1);
                 }
 
                 return slots;
+            }, gson::toJson);
+
+            post(baseURL + "/slots", "application/json", (request, response) -> {
+                // get the body of the HTTP request
+                Map addRequest = gson.fromJson(request.body(), Map.class);
+                Slot slot = null;
+                // check whether everything is in place
+                if(addRequest!=null && addRequest.containsKey("orario") && addRequest.containsKey("data") && addRequest.containsKey("libero")) {
+                    String orario = String.valueOf(addRequest.get("orario"));
+                    String data = String.valueOf(addRequest.get("data"));
+                    boolean libero = Boolean.valueOf(String.valueOf(addRequest.get("libero")));
+
+                    // add the task into the DB
+                    slot = new Slot(orario, data, libero);
+
+
+                    // if success, prepare a suitable HTTP response code
+                    response.status(201);
+                }
+                else {
+                    halt(403);
+                }
+
+                return slot;
             }, gson::toJson);
         }
 

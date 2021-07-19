@@ -1,4 +1,4 @@
-package tasks;
+package taskModelsJSGrid;
 
 public class Slot {
 

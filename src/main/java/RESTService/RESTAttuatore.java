@@ -61,10 +61,10 @@ public class RESTAttuatore {
             Map addRequest = gson.fromJson(request.body(), Map.class);
             Attuatore attuatore = null;
             // check whether everything is in place
-            if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("stato") && addRequest.containsKey("locale_id")) {
+            if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("stato") && addRequest.containsKey("localeId")) {
                 String descrizione = String.valueOf(addRequest.get("descrizione"));
                 int stato = Integer.parseInt(String.valueOf(addRequest.get("stato")));
-                int locale_id = Integer.parseInt(String.valueOf(addRequest.get("locale_id")));
+                int locale_id = Integer.parseInt(String.valueOf(addRequest.get("localeId")));
 
                 // add the task into the DB
                 attuatore = new Attuatore(descrizione, stato, locale_id);

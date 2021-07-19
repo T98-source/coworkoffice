@@ -61,10 +61,10 @@ public class RESTSensore {
             Map addRequest = gson.fromJson(request.body(), Map.class);
             Sensore sensore = null;
             // check whether everything is in place
-            if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("locale_id")) {
+            if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("localeId")) {
 
                 String descrizione = String.valueOf(addRequest.get("descrizione"));
-                int locale_id = Integer.parseInt(String.valueOf(addRequest.get("locale_id")));
+                int locale_id = Integer.parseInt(String.valueOf(addRequest.get("localeId")));
 
                 // add the task into the DB
                 sensore = new Sensore(descrizione, locale_id);
