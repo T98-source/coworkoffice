@@ -77,14 +77,14 @@ public class RESTPrenotazione {
                 if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("data") && addRequest.containsKey("ora_inizio") && addRequest.containsKey("ora_fine") && addRequest.containsKey("clienti") && addRequest.containsKey("ufficio_id") && addRequest.containsKey("utente_id")) {
                     String descrizione = String.valueOf(addRequest.get("descrizione"));
                     Date data = Date.valueOf(String.valueOf(addRequest.get("data")));
-                    Time ora_inizio = Time.valueOf(String.valueOf(addRequest.get("ora_inizio")));
-                    Time ora_fine = Time.valueOf(String.valueOf(addRequest.get("ora_fine")));
+                    int oraInizio = Integer.valueOf(String.valueOf(addRequest.get("ora_inizio")));
+                    int oraFine = Integer.valueOf(String.valueOf(addRequest.get("ora_fine")));
                     int clienti = Integer.parseInt(String.valueOf(addRequest.get("clienti")));
                     int ufficio_id = Integer.parseInt(String.valueOf(addRequest.get("ufficio_id")));
                     String utente_id = String.valueOf(addRequest.get("utente_id"));
 
                     // add the task into the DB
-                    prenotazione = new Prenotazione(descrizione, data, ora_inizio,ora_fine, clienti, ufficio_id,utente_id);
+                    prenotazione = new Prenotazione(descrizione, data, oraInizio, oraFine, clienti, ufficio_id,utente_id);
                     ReservationDao.addReservation(prenotazione);
 
                     // if success, prepare a suitable HTTP response code
@@ -126,20 +126,55 @@ public class RESTPrenotazione {
                 // Calcolo slot di tempo
                 LocalDate startDate = LocalDate.now();
                 LocalDate finalDate = startDate.plusWeeks(2);
+                List<Integer> startTimes = getStartTimes(allReservations);
+                List<Integer> finalTimes = getFinalTimes(allReservations);
 
                 List<Slot> slots = new LinkedList<>();
-                while(!startDate.equals(finalDate)){
-                    int nowHour = LocalDateTime.now().getHour();
+                LocalDate date = startDate;
+                while(!date.equals(finalDate)){
+                    int nowHour = LocalDateTime.now().getHour() + 1;
 
-                    for (int i=nowHour; i<finalHour-1; i++){
+                    if (nowHour < startHour) nowHour = 8;
+                    else if (nowHour > finalHour) nowHour = 8;
 
-                        slots.add(new Slot(nowHour+1, ))
+                    if(date == startDate) date = date.plusDays(1);
+
+                    for (int hour=nowHour; hour<finalHour; hour++){
+                        if(contains(hour, startTimes, finalTimes))
+                            slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), false));
+                        else
+                            slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), true));
                     }
+                    date = date.plusDays(1);
                 }
 
+                return slots;
             }, gson::toJson);
         }
 
+        public static List<Integer> getStartTimes(List<Prenotazione> allReservations){
+            List<Integer> startTimes = new LinkedList<>();
+            for(Prenotazione prenotazione : allReservations){
+                startTimes.add(prenotazione.getOraInizio());
+            }
+            return startTimes;
+        }
+
+        public static List<Integer> getFinalTimes(List<Prenotazione> allReservations){
+            List<Integer> finalTimes = new LinkedList<>();
+            for(Prenotazione prenotazione : allReservations){
+                finalTimes.add(prenotazione.getOraFine());
+            }
+            return finalTimes;
+        }
+
+        public static boolean contains(int oraInizio, List<Integer> startTimes, List<Integer> finalTimes){
+            for(int i=0; i<startTimes.size(); i++){
+                if(startTimes.get(i) <= oraInizio && finalTimes.get(i) > oraInizio)
+                    return true;
+            }
+            return false;
+        }
     }
 
 

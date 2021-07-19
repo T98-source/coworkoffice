@@ -2,11 +2,13 @@ package tasks;
 
 public class Slot {
 
-    private int oraInizio;
+    private String orario;
+    private String data;
     private boolean libero;
 
-    public Slot(int oraInizio, boolean libero){
-        this.oraInizio = oraInizio;
+    public Slot(String orario, String data, boolean libero){
+        this.orario = orario;
+        this.data = data;
         this.libero = libero;
     }
 }

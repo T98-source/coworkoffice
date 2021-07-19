@@ -17,15 +17,15 @@ public class Prenotazione {
 
     private Date data;
 
-    private Time ora_inizio;
+    private int oraInizio;
 
-    private Time ora_fine;
+    private int oraFine;
 
     private int clienti;
 
-    private int ufficio_id;
+    private int ufficioId;
 
-    private String utente_id;
+    private String utenteId;
 
 
 
@@ -39,15 +39,15 @@ public class Prenotazione {
      * @param id represents the reservation unique identifier
      * @param descrizione the reservation description
      */
-    public Prenotazione(int id, String descrizione, Date data, Time ora_inizio, Time ora_fine, int clienti, int ufficio_id, String utente_id) {
+    public Prenotazione(int id, String descrizione, Date data, int oraInizio, int oraFine, int clienti, int ufficio_id, String utente_id) {
         this.id = id;
         this.descrizione = descrizione;
         this.data = data;
-        this.ora_inizio = ora_inizio;
-        this.ora_fine = ora_fine;
+        this.oraInizio = oraInizio;
+        this.oraFine = oraFine;
         this.clienti = clienti;
-        this.ufficio_id = ufficio_id;
-        this.utente_id=utente_id;
+        this.ufficioId = ufficioId;
+        this.utenteId=utenteId;
     }
 
 
@@ -56,15 +56,15 @@ public class Prenotazione {
      *
      * @param description the task content
      */
-    public Prenotazione(String description, Date data, Time ora_inizio, Time ora_fine, int clienti, int ufficio_id, String utente_id) {
+    public Prenotazione(String description, Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
         this.id = 0;
         this.descrizione = description;
         this.data = data;
-        this.ora_inizio = ora_inizio;
-        this.ora_fine = ora_fine;
+        this.oraInizio = oraInizio;
+        this.oraFine = oraFine;
         this.clienti = clienti;
-        this.ufficio_id = ufficio_id;
-        this.utente_id=utente_id;
+        this.ufficioId = ufficioId;
+        this.utenteId=utenteId;
     }
 
 
@@ -82,21 +82,23 @@ public class Prenotazione {
         return data;
     }
 
-    public Time getora_inizio() {
-        return ora_inizio;
+    public int getOraInizio() {
+        return oraInizio;
     }
 
-    public Time getora_fine() {
-        return ora_fine;
+    public int getOraFine() {
+        return oraFine;
     }
 
-    public int getClienti(){return clienti; }
-
-    public int getufficio_id() {
-        return ufficio_id;
+    public int getClienti(){
+        return clienti;
     }
 
-    public String getutente_id(){ return utente_id; }
+    public int getUfficioId() {
+        return ufficioId;
+    }
 
-
+    public String getUtenteId(){
+        return utenteId;
+    }
 }

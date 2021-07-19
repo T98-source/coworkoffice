@@ -1,4 +1,5 @@
 import RESTService.*;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.google.gson.Gson;
 
 import static jwtToken.verifySignature.verifySignatureTokenJWT;
@@ -46,6 +47,9 @@ public class TasksService {
                 if(!verifySignatureTokenJWT(token))
                     halt(401);
             } catch(NullPointerException e){
+                if(!(request.requestMethod() == "OPTIONS"))
+                    halt(401);
+            }catch(JWTDecodeException e){
                 if(!(request.requestMethod() == "OPTIONS"))
                     halt(401);
             }
