@@ -1,0 +1,44 @@
+tasksDao/GestioneUtente.java
+ tasksDao.GestioneUtente
+tasks/Sensore.java
+ tasks.Sensore
+tasksDao/GestionePrenotazione.java
+ tasksDao.GestionePrenotazione
+tasksDao/GestioneSensore.java
+ tasksDao.GestioneSensore
+tasks/Ufficio.java
+ tasks.Ufficio
+tasks/Attuatore.java
+ tasks.Attuatore
+RESTService/RESTAttuatore.java
+ RESTService.RESTAttuatore
+tasksDao/GestioneUfficio.java
+ tasksDao.GestioneUfficio
+tasksDao/GestioneAttuatore.java
+ tasksDao.GestioneAttuatore
+jwtToken/verifySignature.java
+ jwtToken.verifySignature
+jwtToken/jwtlib/JWTfun.java
+ jwtToken.jwtlib.JWTfun
+tasks/Prenotazione.java
+ tasks.Prenotazione
+tasks/Utente.java
+ tasks.Utente
+utils/DBConnect.java
+ utils.DBConnect
+tasks/Misura.java
+ tasks.Misura
+tasksDao/GestioneMisura.java
+ tasksDao.GestioneMisura
+RESTService/RESTPrenotazione.java
+ RESTService.RESTPrenotazione
+RESTService/RESTUtente.java
+ RESTService.RESTUtente
+RESTService/RESTSensore.java
+ RESTService.RESTSensore
+RESTService/RESTMisura.java
+ RESTService.RESTMisura
+TasksService.java
+ TasksService
+RESTService/RESTUfficio.java
+ RESTService.RESTUfficio
