@@ -22,7 +22,7 @@ public class RESTPrenotazione {
         public static void REST(Gson gson, String baseURL){
 
             GestionePrenotazione ReservationDao = new GestionePrenotazione();
-
+            int intero = 0;
             // get all the tasks
             get(baseURL + "/reservations", (request, response) -> {
                 // set a proper response code and type
