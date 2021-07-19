@@ -126,15 +126,6 @@ public class RESTPrenotazione {
                 while(true){
 
                 }
-                    Map<String, List<Prenotazione>> finalJson = new HashMap<>();
-                    finalJson.put("reservations", allReservations);
-
-                    return allReservations;
-                    List<Prenotazione> allReservations = ReservationDao.getAllReservationsUser(userId);
-                    // prepare the JSON-related structure to return
-                    Map<String, List<Prenotazione>> finalJson = new HashMap<>();
-                    finalJson.put("Reservations", allReservations);
-                    return allReservations;
 
             }, gson::toJson);
         }
