@@ -2,14 +2,14 @@ package RESTService;
 
 import com.google.gson.Gson;
 import tasks.Prenotazione;
+import tasks.Slot;
 import tasksDao.GestionePrenotazione;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static spark.Spark.*;
 import static spark.Spark.halt;
@@ -120,9 +120,21 @@ public class RESTPrenotazione {
                 response.status(200);
 
                 List<Prenotazione> allReservations = ReservationDao.getAllReservations();
-                LocalDate todaysDate = LocalDate.now();
-                while(true){
 
+                int startHour = 8;
+                int finalHour = 20;
+                // Calcolo slot di tempo
+                LocalDate startDate = LocalDate.now();
+                LocalDate finalDate = startDate.plusWeeks(2);
+
+                List<Slot> slots = new LinkedList<>();
+                while(!startDate.equals(finalDate)){
+                    int nowHour = LocalDateTime.now().getHour();
+
+                    for (int i=nowHour; i<finalHour-1; i++){
+
+                        slots.add(new Slot(nowHour+1, ))
+                    }
                 }
 
             }, gson::toJson);

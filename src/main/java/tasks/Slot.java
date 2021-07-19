@@ -1,9 +1,12 @@
 package tasks;
 
-import java.sql.Time;
-
 public class Slot {
 
-    private Time ora_inizio;
+    private int oraInizio;
     private boolean libero;
+
+    public Slot(int oraInizio, boolean libero){
+        this.oraInizio = oraInizio;
+        this.libero = libero;
+    }
 }

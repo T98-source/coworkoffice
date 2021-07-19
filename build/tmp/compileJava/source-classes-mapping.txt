@@ -12,8 +12,8 @@ tasks/Attuatore.java
  tasks.Attuatore
 RESTService/RESTAttuatore.java
  RESTService.RESTAttuatore
-tasksDao/GestioneUfficio.java
- tasksDao.GestioneUfficio
+RESTService/RESTSensore.java
+ RESTService.RESTSensore
 tasksDao/GestioneAttuatore.java
  tasksDao.GestioneAttuatore
 jwtToken/verifySignature.java
@@ -30,15 +30,17 @@ tasks/Misura.java
  tasks.Misura
 tasksDao/GestioneMisura.java
  tasksDao.GestioneMisura
-RESTService/RESTPrenotazione.java
- RESTService.RESTPrenotazione
 RESTService/RESTUtente.java
  RESTService.RESTUtente
-RESTService/RESTSensore.java
- RESTService.RESTSensore
-RESTService/RESTMisura.java
- RESTService.RESTMisura
 TasksService.java
  TasksService
+RESTService/RESTPrenotazione.java
+ RESTService.RESTPrenotazione
+RESTService/RESTMisura.java
+ RESTService.RESTMisura
+tasks/Slot.java
+ tasks.Slot
+tasksDao/GestioneUfficio.java
+ tasksDao.GestioneUfficio
 RESTService/RESTUfficio.java
  RESTService.RESTUfficio

@@ -20,7 +20,7 @@ public class GestioneUfficio {
      * @return a list of office, or an empty list if no offices are available
      */
     public List<Ufficio> getAllOffices() {
-        final String sql = "SELECT id, descrizione, tipo FROM locali";
+        final String sql = "SELECT id, descrizione, tipo FROM locali WHERE tipo = 'ufficio'";
 
         List<Ufficio> offices = new LinkedList<>();
 
