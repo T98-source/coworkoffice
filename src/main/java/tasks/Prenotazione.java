@@ -25,7 +25,7 @@ public class Prenotazione {
 
     private int ufficio_id;
 
-    private int utente_id;
+    private String utente_id;
 
 
 
@@ -39,7 +39,7 @@ public class Prenotazione {
      * @param id represents the reservation unique identifier
      * @param descrizione the reservation description
      */
-    public Prenotazione(int id, String descrizione, Date data, Time ora_inizio, Time ora_fine, int clienti, int ufficio_id, int utente_id) {
+    public Prenotazione(int id, String descrizione, Date data, Time ora_inizio, Time ora_fine, int clienti, int ufficio_id, String utente_id) {
         this.id = id;
         this.descrizione = descrizione;
         this.data = data;
@@ -56,7 +56,7 @@ public class Prenotazione {
      *
      * @param description the task content
      */
-    public Prenotazione(String description, Date data, Time ora_inizio, Time ora_fine, int clienti, int ufficio_id, int utente_id) {
+    public Prenotazione(String description, Date data, Time ora_inizio, Time ora_fine, int clienti, int ufficio_id, String utente_id) {
         this.id = 0;
         this.descrizione = description;
         this.data = data;
@@ -96,7 +96,7 @@ public class Prenotazione {
         return ufficio_id;
     }
 
-    public int getutente_id(){ return utente_id; }
+    public String getutente_id(){ return utente_id; }
 
 
 }

@@ -32,7 +32,7 @@ public class GestionePrenotazione {
 
             while (rs.next()) {
 
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getTime("ora_inizio"), rs.getTime("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getInt("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getTime("ora_inizio"), rs.getTime("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -58,7 +58,7 @@ public class GestionePrenotazione {
 
             while (rs.next()) {
 
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getTime("ora_inizio"), rs.getTime("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getInt("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getTime("ora_inizio"), rs.getTime("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -90,7 +90,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                Reservation = new Prenotazione(id, rs.getString("descrizione"), rs.getDate("data"), rs.getTime("ora_inizio"), rs.getTime("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getInt("utente_id"));
+                Reservation = new Prenotazione(id, rs.getString("descrizione"), rs.getDate("data"), rs.getTime("ora_inizio"), rs.getTime("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
             }
 
             conn.close();
@@ -117,7 +117,7 @@ public class GestionePrenotazione {
             st.setTime(4, newReservation.getora_fine());
             st.setInt(5, newReservation.getClienti());
             st.setInt(6, newReservation.getufficio_id());
-            st.setInt(7, newReservation.getutente_id());
+            st.setString(7, newReservation.getutente_id());
 
             st.executeUpdate();
 

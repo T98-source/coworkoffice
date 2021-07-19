@@ -20,7 +20,6 @@ public class RESTPrenotazione {
 
 
         public static void REST(Gson gson, String baseURL){
-            //bellinov
             GestionePrenotazione ReservationDao = new GestionePrenotazione();
             // get all the tasks
             get(baseURL + "/reservations", (request, response) -> {
@@ -30,7 +29,7 @@ public class RESTPrenotazione {
 
                String usertype = JWTfun.getUserType();
                String userIdraw = JWTfun.getUserId();
-               String userId = userIdraw.substring(1,userIdraw.length()-2);
+               String userId = userIdraw.substring(1,userIdraw.length()-1);
                 System.out.println("id: " + userId); //<- test di prova per vedere cosa stampa
                 if(usertype.contains("admin")) {
                     // get all tasks from the DB
@@ -82,7 +81,7 @@ public class RESTPrenotazione {
                     Time ora_fine = Time.valueOf(String.valueOf(addRequest.get("ora_fine")));
                     int clienti = Integer.parseInt(String.valueOf(addRequest.get("clienti")));
                     int ufficio_id = Integer.parseInt(String.valueOf(addRequest.get("ufficio_id")));
-                    int utente_id = Integer.parseInt(String.valueOf(addRequest.get("utente_id")));
+                    String utente_id = String.valueOf(addRequest.get("utente_id"));
 
                     // add the task into the DB
                     prenotazione = new Prenotazione(descrizione, data, ora_inizio,ora_fine, clienti, ufficio_id,utente_id);
@@ -130,5 +129,8 @@ public class RESTPrenotazione {
         }
 
     }
+
+
+
 
 
