@@ -20,6 +20,7 @@ public class RESTPrenotazione {
 
 
         public static void REST(Gson gson, String baseURL){
+            //bellino
             GestionePrenotazione ReservationDao = new GestionePrenotazione();
             // get all the tasks
             get(baseURL + "/reservations", (request, response) -> {
