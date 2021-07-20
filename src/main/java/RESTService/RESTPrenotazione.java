@@ -109,13 +109,12 @@ public class RESTPrenotazione {
             });
 
             // get all slots available
-            get(baseURL + "/slots/:id", (request, response) -> {
+            get(baseURL + "/slots/:ufficioId", (request, response) -> {
                 // set a proper response code and type
                 response.type("application/json");
                 response.status(200);
 
-                List<Prenotazione> allReservations = ReservationDao.getAllReservationsOffice(Integer.valueOf(request.params(":id")));
-                List<Slot> slots = ReservationDao.getSlots(allReservations);
+                List<Slot> slots = ReservationDao.getSlots(Integer.valueOf(request.params(":ufficioId")));
 
                 return slots;
             }, gson::toJson);
@@ -133,10 +132,12 @@ public class RESTPrenotazione {
                     int i = orario.indexOf('-');
                     int oraInizio = Integer.valueOf(orario.substring(0, i));
                     int oraFine = Integer.valueOf(orario.substring(i+1, orario.length()));
-                    String userId = JWTfun.getUserId();
+                    String utenteId = JWTfun.getUserId();
+                    String utenteIdFinal = utenteId.substring(1, utenteId.length()-1);
                     int clienti = Integer.valueOf(request.params(":clienti"));
                     int ufficioId = Integer.valueOf(request.params(":ufficioId"));
-                    Prenotazione prenotazione = new Prenotazione(date, oraInizio, oraFine, clienti, ufficioId, userId);
+
+                    Prenotazione prenotazione = new Prenotazione(date, oraInizio, oraFine, clienti, ufficioId, utenteIdFinal);
                     ReservationDao.addReservation(prenotazione);
 
                     // if success, prepare a suitable HTTP response code
@@ -160,8 +161,9 @@ public class RESTPrenotazione {
                     int ufficioId = Integer.valueOf(request.params(":ufficioId"));
                     int i = orario.indexOf('-');
                     int oraInizio = Integer.valueOf(orario.substring(0, i));
+                    String utenteId = JWTfun.getUserId();
 
-                    ReservationDao.deleteReservation(oraInizio, ufficioId);
+                    ReservationDao.deleteReservation(oraInizio, ufficioId, utenteId);
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
                 }
@@ -169,7 +171,7 @@ public class RESTPrenotazione {
                     halt(403);
                 }
                 return "";
-            });
+            }, gson::toJson);
         }
     }
 

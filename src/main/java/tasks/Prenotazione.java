@@ -35,9 +35,8 @@ public class Prenotazione {
      * Waiting room main constructor.
      *
      * @param id represents the reservation unique identifier
-     * @param descrizione the reservation description
      */
-    public Prenotazione(int id, Date data, int oraInizio, int oraFine, int clienti, int ufficio_id, String utente_id) {
+    public Prenotazione(int id, Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
         this.id = id;
         this.data = data;
         this.oraInizio = oraInizio;
@@ -51,7 +50,6 @@ public class Prenotazione {
     /**
      * Overloaded constructor. It create a reservation without a given id.
      *
-     * @param description the task content
      */
     public Prenotazione(Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
         this.id = 0;

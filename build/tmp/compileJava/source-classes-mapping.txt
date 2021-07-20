@@ -2,8 +2,8 @@ tasksDao/GestioneSensore.java
  tasksDao.GestioneSensore
 tasksDao/GestioneUtente.java
  tasksDao.GestioneUtente
-tasks/Sensore.java
- tasks.Sensore
+TasksService.java
+ TasksService
 tasksDao/GestioneUfficio.java
  tasksDao.GestioneUfficio
 tasks/Ufficio.java
@@ -38,8 +38,8 @@ tasks/Attuatore.java
  tasks.Attuatore
 RESTService/RESTSensore.java
  RESTService.RESTSensore
-TasksService.java
- TasksService
+tasks/Sensore.java
+ tasks.Sensore
 tasksDao/GestionePrenotazione.java
  tasksDao.GestionePrenotazione
 RESTService/RESTPrenotazione.java
