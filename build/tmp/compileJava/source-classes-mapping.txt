@@ -1,46 +1,46 @@
-tasksDao/GestioneUtente.java
- tasksDao.GestioneUtente
-tasks/Sensore.java
- tasks.Sensore
-tasksDao/GestioneUfficio.java
- tasksDao.GestioneUfficio
 tasksDao/GestioneSensore.java
  tasksDao.GestioneSensore
-tasks/Ufficio.java
- tasks.Ufficio
-tasks/Attuatore.java
- tasks.Attuatore
-tasks/Prenotazione.java
- tasks.Prenotazione
-RESTService/RESTUfficio.java
- RESTService.RESTUfficio
-tasksDao/GestioneAttuatore.java
- tasksDao.GestioneAttuatore
-jwtToken/verifySignature.java
- jwtToken.verifySignature
-jwtToken/jwtlib/JWTfun.java
- jwtToken.jwtlib.JWTfun
-tasksDao/GestionePrenotazione.java
- tasksDao.GestionePrenotazione
-tasks/Utente.java
- tasks.Utente
-utils/DBConnect.java
- utils.DBConnect
-tasks/Misura.java
- tasks.Misura
-tasksDao/GestioneMisura.java
- tasksDao.GestioneMisura
-RESTService/RESTUtente.java
- RESTService.RESTUtente
-taskModelsJSGrid/Slot.java
- taskModelsJSGrid.Slot
+tasksDao/GestioneUtente.java
+ tasksDao.GestioneUtente
 TasksService.java
  TasksService
-RESTService/RESTSensore.java
- RESTService.RESTSensore
+tasksDao/GestioneUfficio.java
+ tasksDao.GestioneUfficio
+tasks/Ufficio.java
+ tasks.Ufficio
+tasksDao/GestioneAttuatore.java
+ tasksDao.GestioneAttuatore
+RESTService/RESTUfficio.java
+ RESTService.RESTUfficio
 RESTService/RESTMisura.java
  RESTService.RESTMisura
 RESTService/RESTAttuatore.java
  RESTService.RESTAttuatore
+jwtToken/verifySignature.java
+ jwtToken.verifySignature
+RESTService/RESTUtente.java
+ RESTService.RESTUtente
+tasks/Prenotazione.java
+ tasks.Prenotazione
+tasks/Utente.java
+ tasks.Utente
+tasks/Sensore.java
+ tasks.Sensore
+tasksDao/GestioneMisura.java
+ tasksDao.GestioneMisura
+tasks/Misura.java
+ tasks.Misura
+jwtToken/jwtlib/JWTfun.java
+ jwtToken.jwtlib.JWTfun
+utils/DBConnect.java
+ utils.DBConnect
+tasks/Attuatore.java
+ tasks.Attuatore
+RESTService/RESTSensore.java
+ RESTService.RESTSensore
+taskModelsJSGrid/Slot.java
+ taskModelsJSGrid.Slot
+tasksDao/GestionePrenotazione.java
+ tasksDao.GestionePrenotazione
 RESTService/RESTPrenotazione.java
  RESTService.RESTPrenotazione

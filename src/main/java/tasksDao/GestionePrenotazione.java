@@ -1,5 +1,6 @@
 package tasksDao;
 
+import taskModelsJSGrid.Slot;
 import tasks.Prenotazione;
 import utils.DBConnect;
 
@@ -7,6 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,20 +72,22 @@ public class GestionePrenotazione {
         return reservations;
     }
 
-    public Prenotazione getReservationUser(String utenteId, )
-    {
-        Prenotazione Reservation = null;
-        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE id = ?";
+
+    public List<Prenotazione> getAllReservationsOffice(int ufficioId) {
+        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE ufficio_id=?";
+
+        List<Prenotazione> reservations = new LinkedList<>();
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, id);
+            st.setInt(1, ufficioId);
 
             ResultSet rs = st.executeQuery();
 
-            while (rs.next()) {
-                Reservation = new Prenotazione(id, rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+            while(rs.next()) {
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                reservations.add(t);
             }
 
             conn.close();
@@ -89,7 +95,7 @@ public class GestionePrenotazione {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Reservation;
+        return reservations;
     }
 
 
@@ -164,5 +170,67 @@ public class GestionePrenotazione {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public List<Slot> getSlots(List<Prenotazione> allReservations) {
+        int startHour = 8;
+        int finalHour = 20;
+        // Calcolo slot di tempo
+        LocalDate startDate = LocalDate.now();
+        LocalDate finalDate = startDate.plusWeeks(2);
+        List<Integer> startTimes = getStartTimes(allReservations);
+        List<Integer> finalTimes = getFinalTimes(allReservations);
+
+        List<Slot> slots = new LinkedList<>();
+        LocalDate date = startDate;
+        while(!date.equals(finalDate)){
+            if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                date = date.plusDays(1);
+                continue;
+            }
+
+            int nowHour = LocalDateTime.now().getHour() + 1;
+
+            if(date == startDate) {
+                if (nowHour < startHour) nowHour = 8;
+                else if (nowHour > finalHour){
+                    nowHour = 8;
+                    date = date.plusDays(1);
+                }
+            } else nowHour = 8;
+
+            for (int hour=nowHour; hour<finalHour; hour++){
+                if(!contains(hour, startTimes, finalTimes)) // Lo slot è libero
+                    slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), true));
+            }
+            date = date.plusDays(1);
+        }
+
+        return slots;
+    }
+
+    public static List<Integer> getStartTimes(List<Prenotazione> allReservations){
+        List<Integer> startTimes = new LinkedList<>();
+        for(Prenotazione prenotazione : allReservations){
+            startTimes.add(prenotazione.getOraInizio());
+        }
+        return startTimes;
+    }
+
+    public static List<Integer> getFinalTimes(List<Prenotazione> allReservations){
+        List<Integer> finalTimes = new LinkedList<>();
+        for(Prenotazione prenotazione : allReservations){
+            finalTimes.add(prenotazione.getOraFine());
+        }
+        return finalTimes;
+    }
+
+    public static boolean contains(int oraInizio, List<Integer> startTimes, List<Integer> finalTimes){
+        for(int i=0; i<startTimes.size(); i++){
+            if(startTimes.get(i) <= oraInizio && finalTimes.get(i) > oraInizio)
+                return true;
+        }
+        return false;
     }
 }

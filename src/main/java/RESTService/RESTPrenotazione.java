@@ -101,7 +101,7 @@ public class RESTPrenotazione {
                 {
                     if(request.params(":id")!=null) {
                     // add the task into the DB
-                    ReservationDao.deleteReservation(Integer.parseInt(String.valueOf(request.params(":id"))));
+                    ReservationDao.deleteReservation(Integer.valueOf(request.params(":id")));
                     response.status(201);
 
                     }
@@ -113,37 +113,13 @@ public class RESTPrenotazione {
             });
 
             // get all slots available
-            get(baseURL + "/slots", (request, response) -> {
+            get(baseURL + "/slots/:id", (request, response) -> {
                 // set a proper response code and type
                 response.type("application/json");
                 response.status(200);
 
-                List<Prenotazione> allReservations = ReservationDao.getAllReservations();
-
-                int startHour = 8;
-                int finalHour = 20;
-                // Calcolo slot di tempo
-                LocalDate startDate = LocalDate.now();
-                LocalDate finalDate = startDate.plusWeeks(2);
-                List<Integer> startTimes = getStartTimes(allReservations);
-                List<Integer> finalTimes = getFinalTimes(allReservations);
-
-                List<Slot> slots = new LinkedList<>();
-                LocalDate date = startDate;
-                while(!date.equals(finalDate)){
-                    int nowHour = LocalDateTime.now().getHour() + 1;
-
-                    if (nowHour < startHour) nowHour = 8;
-                    else if (nowHour > finalHour) nowHour = 8;
-
-                    if(date == startDate) date = date.plusDays(1);
-
-                    for (int hour=nowHour; hour<finalHour; hour++){
-                        if(!contains(hour, startTimes, finalTimes)) // Lo slot è libero
-                            slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), true));
-                    }
-                    date = date.plusDays(1);
-                }
+                List<Prenotazione> allReservations = ReservationDao.getAllReservationsOffice(Integer.valueOf(request.params(":id")));
+                List<Slot> slots = ReservationDao.getSlots(allReservations);
 
                 return slots;
             }, gson::toJson);
@@ -161,7 +137,6 @@ public class RESTPrenotazione {
                     // add the task into the DB
                     slot = new Slot(orario, data, libero);
 
-
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
                 }
@@ -171,30 +146,6 @@ public class RESTPrenotazione {
 
                 return slot;
             }, gson::toJson);
-        }
-
-        public static List<Integer> getStartTimes(List<Prenotazione> allReservations){
-            List<Integer> startTimes = new LinkedList<>();
-            for(Prenotazione prenotazione : allReservations){
-                startTimes.add(prenotazione.getOraInizio());
-            }
-            return startTimes;
-        }
-
-        public static List<Integer> getFinalTimes(List<Prenotazione> allReservations){
-            List<Integer> finalTimes = new LinkedList<>();
-            for(Prenotazione prenotazione : allReservations){
-                finalTimes.add(prenotazione.getOraFine());
-            }
-            return finalTimes;
-        }
-
-        public static boolean contains(int oraInizio, List<Integer> startTimes, List<Integer> finalTimes){
-            for(int i=0; i<startTimes.size(); i++){
-                if(startTimes.get(i) <= oraInizio && finalTimes.get(i) > oraInizio)
-                    return true;
-            }
-            return false;
         }
     }
 
