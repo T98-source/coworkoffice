@@ -2,8 +2,8 @@ tasksDao/GestioneSensore.java
  tasksDao.GestioneSensore
 tasksDao/GestioneUtente.java
  tasksDao.GestioneUtente
-TasksService.java
- TasksService
+tasks/Sensore.java
+ tasks.Sensore
 tasksDao/GestioneUfficio.java
  tasksDao.GestioneUfficio
 tasks/Ufficio.java
@@ -24,8 +24,8 @@ tasks/Prenotazione.java
  tasks.Prenotazione
 tasks/Utente.java
  tasks.Utente
-tasks/Sensore.java
- tasks.Sensore
+taskModelsJSGrid/Slot.java
+ taskModelsJSGrid.Slot
 tasksDao/GestioneMisura.java
  tasksDao.GestioneMisura
 tasks/Misura.java
@@ -38,8 +38,8 @@ tasks/Attuatore.java
  tasks.Attuatore
 RESTService/RESTSensore.java
  RESTService.RESTSensore
-taskModelsJSGrid/Slot.java
- taskModelsJSGrid.Slot
+TasksService.java
+ TasksService
 tasksDao/GestionePrenotazione.java
  tasksDao.GestionePrenotazione
 RESTService/RESTPrenotazione.java

@@ -6,8 +6,6 @@ import taskModelsJSGrid.Slot;
 import tasksDao.GestionePrenotazione;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -20,15 +18,16 @@ public class RESTPrenotazione {
 
         public static void REST(Gson gson, String baseURL){
             GestionePrenotazione ReservationDao = new GestionePrenotazione();
+
             // get all the tasks
             get(baseURL + "/reservations", (request, response) -> {
                 // set a proper response code and type
                 response.type("application/json");
                 response.status(200);
 
-               String usertype = JWTfun.getUserType();
-               String userIdraw = JWTfun.getUserId();
-               String userId = userIdraw.substring(1,userIdraw.length()-1);
+                String usertype = JWTfun.getUserType();
+                String userIdraw = JWTfun.getUserId();
+                String userId = userIdraw.substring(1,userIdraw.length()-1);
                 System.out.println("id: " + userId); //<- test di prova per vedere cosa stampa
                 if(usertype.contains("admin")) {
                     // get all tasks from the DB
@@ -79,11 +78,11 @@ public class RESTPrenotazione {
                     int oraInizio = Integer.valueOf(String.valueOf(addRequest.get("oraInizio")));
                     int oraFine = Integer.valueOf(String.valueOf(addRequest.get("oraFine")));
                     int clienti = Integer.parseInt(String.valueOf(addRequest.get("clienti")));
-                    int ufficio_id = Integer.parseInt(String.valueOf(addRequest.get("ufficioId")));
-                    String utente_id = String.valueOf(addRequest.get("utenteId"));
+                    int ufficioId = Integer.parseInt(String.valueOf(addRequest.get("ufficioId")));
+                    String utenteId = String.valueOf(addRequest.get("utenteId"));
 
                     // add the task into the DB
-                    prenotazione = new Prenotazione(descrizione, data, oraInizio, oraFine, clienti, ufficio_id,utente_id);
+                    prenotazione = new Prenotazione(data, oraInizio, oraFine, clienti, ufficioId,utenteId);
                     ReservationDao.addReservation(prenotazione);
 
                     // if success, prepare a suitable HTTP response code
@@ -98,18 +97,15 @@ public class RESTPrenotazione {
 
 
             delete(baseURL + "/reservations/:id", "application/json", (request, response) -> {
-                {
-                    if(request.params(":id")!=null) {
+                if(request.params(":id")!=null) {
                     // add the task into the DB
                     ReservationDao.deleteReservation(Integer.valueOf(request.params(":id")));
                     response.status(201);
-
-                    }
-                    else {
-                        halt(403);
-                    }
-                    return "";
                 }
+                else {
+                    halt(403);
+                }
+                return "";
             });
 
             // get all slots available
@@ -124,18 +120,24 @@ public class RESTPrenotazione {
                 return slots;
             }, gson::toJson);
 
-            post(baseURL + "/slots", "application/json", (request, response) -> {
+            post(baseURL + "/slots/:ufficioId/:clienti", "application/json", (request, response) -> {
                 // get the body of the HTTP request
                 Map addRequest = gson.fromJson(request.body(), Map.class);
-                Slot slot = null;
+
                 // check whether everything is in place
-                if(addRequest!=null && addRequest.containsKey("orario") && addRequest.containsKey("data") && addRequest.containsKey("libero")) {
+                if(addRequest!=null && addRequest.containsKey("orario") && addRequest.containsKey("data")) {
                     String orario = String.valueOf(addRequest.get("orario"));
                     String data = String.valueOf(addRequest.get("data"));
-                    boolean libero = Boolean.valueOf(String.valueOf(addRequest.get("libero")));
 
-                    // add the task into the DB
-                    slot = new Slot(orario, data, libero);
+                    Date date = Date.valueOf(data);
+                    int i = orario.indexOf('-');
+                    int oraInizio = Integer.valueOf(orario.substring(0, i));
+                    int oraFine = Integer.valueOf(orario.substring(i+1, orario.length()));
+                    String userId = JWTfun.getUserId();
+                    int clienti = Integer.valueOf(request.params(":clienti"));
+                    int ufficioId = Integer.valueOf(request.params(":ufficioId"));
+                    Prenotazione prenotazione = new Prenotazione(date, oraInizio, oraFine, clienti, ufficioId, userId);
+                    ReservationDao.addReservation(prenotazione);
 
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
@@ -144,8 +146,30 @@ public class RESTPrenotazione {
                     halt(403);
                 }
 
-                return slot;
+                return "";
             }, gson::toJson);
+
+            delete(baseURL + "/slots/:ufficioId", "application/json", (request, response) -> {
+                // get the body of the HTTP request
+                Map deleteRequest = gson.fromJson(request.body(), Map.class);
+
+                if(deleteRequest!=null && deleteRequest.containsKey("orario") && deleteRequest.containsKey("data")) {
+                    String orario = String.valueOf(deleteRequest.get("orario"));
+                    String data = String.valueOf(deleteRequest.get("data"));
+
+                    int ufficioId = Integer.valueOf(request.params(":ufficioId"));
+                    int i = orario.indexOf('-');
+                    int oraInizio = Integer.valueOf(orario.substring(0, i));
+
+                    ReservationDao.deleteReservation(oraInizio, ufficioId);
+                    // if success, prepare a suitable HTTP response code
+                    response.status(201);
+                }
+                else {
+                    halt(403);
+                }
+                return "";
+            });
         }
     }
 

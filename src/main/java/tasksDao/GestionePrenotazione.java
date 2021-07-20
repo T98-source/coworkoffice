@@ -24,7 +24,7 @@ public class GestionePrenotazione {
      * @return a list of Reservation, or an empty list if no reservations are available
      */
     public List<Prenotazione> getAllReservations() {
-        final String sql = "SELECT id, descrizione, data , ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni";
+        final String sql = "SELECT id, data , ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
@@ -35,7 +35,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while(rs.next()) {
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -48,7 +48,7 @@ public class GestionePrenotazione {
     }
 
     public List<Prenotazione> getAllReservationsUser(String utenteId) {
-        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id=?";
+        final String sql = "SELECT id, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id=?";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
@@ -60,7 +60,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while(rs.next()) {
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -74,7 +74,7 @@ public class GestionePrenotazione {
 
 
     public List<Prenotazione> getAllReservationsOffice(int ufficioId) {
-        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE ufficio_id=?";
+        final String sql = "SELECT id, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE ufficio_id=?";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
@@ -86,7 +86,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while(rs.next()) {
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -107,7 +107,7 @@ public class GestionePrenotazione {
     public Prenotazione getReservation(int id)
     {
         Prenotazione Reservation = null;
-        final String sql = "SELECT id, descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE id = ?";
+        final String sql = "SELECT id, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE id = ?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -117,7 +117,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                Reservation = new Prenotazione(id, rs.getString("descrizione"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Reservation = new Prenotazione(id, rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
             }
 
             conn.close();
@@ -133,18 +133,17 @@ public class GestionePrenotazione {
      * @param newReservation the Reservation to be added
      */
     public void addReservation(Prenotazione newReservation) {
-        final String sql = "INSERT INTO prenotazioni (descrizione, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id) VALUES (?,?,?,?,?,?,?)";
+        final String sql = "INSERT INTO prenotazioni (data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id) VALUES (?,?,?,?,?,?)";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, newReservation.getDescrizione());
-            st.setDate(2, newReservation.getData());
-            st.setInt(3, newReservation.getOraInizio());
-            st.setInt(4, newReservation.getOraFine());
-            st.setInt(5, newReservation.getClienti());
-            st.setInt(6, newReservation.getUfficioId());
-            st.setString(7, newReservation.getUtenteId());
+            st.setDate(1, newReservation.getData());
+            st.setInt(2, newReservation.getOraInizio());
+            st.setInt(3, newReservation.getOraFine());
+            st.setInt(4, newReservation.getClienti());
+            st.setInt(5, newReservation.getUfficioId());
+            st.setString(6, newReservation.getUtenteId());
 
             st.executeUpdate();
 
@@ -156,7 +155,7 @@ public class GestionePrenotazione {
     }
 
     public void deleteReservation(int id) {
-        final String sql = "DELETE FROM prenotazioni WHERE id= ?";
+        final String sql = "DELETE FROM prenotazioni WHERE id = ?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -172,6 +171,24 @@ public class GestionePrenotazione {
         }
     }
 
+    public void deleteReservation(int oraInizio, int ufficioId)
+    {
+        Prenotazione Reservation = null;
+        final String sql = "DELETE FROM prenotazioni WHERE ora_inizio = ? AND ufficio_id = ?";
+
+        try {
+            Connection conn = DBConnect.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, oraInizio);
+            st.setInt(2, ufficioId);
+
+            st.executeQuery();
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<Slot> getSlots(List<Prenotazione> allReservations) {
         int startHour = 8;
@@ -202,7 +219,7 @@ public class GestionePrenotazione {
 
             for (int hour=nowHour; hour<finalHour; hour++){
                 if(!contains(hour, startTimes, finalTimes)) // Lo slot è libero
-                    slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), true));
+                    slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString()));
             }
             date = date.plusDays(1);
         }

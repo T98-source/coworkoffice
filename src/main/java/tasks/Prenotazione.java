@@ -13,8 +13,6 @@ public class Prenotazione {
     // the unique id of the office
     private int id;
 
-    private String descrizione;
-
     private Date data;
 
     private int oraInizio;
@@ -39,15 +37,14 @@ public class Prenotazione {
      * @param id represents the reservation unique identifier
      * @param descrizione the reservation description
      */
-    public Prenotazione(int id, String descrizione, Date data, int oraInizio, int oraFine, int clienti, int ufficio_id, String utente_id) {
+    public Prenotazione(int id, Date data, int oraInizio, int oraFine, int clienti, int ufficio_id, String utente_id) {
         this.id = id;
-        this.descrizione = descrizione;
         this.data = data;
         this.oraInizio = oraInizio;
         this.oraFine = oraFine;
         this.clienti = clienti;
         this.ufficioId = ufficioId;
-        this.utenteId=utenteId;
+        this.utenteId = utenteId;
     }
 
 
@@ -56,15 +53,14 @@ public class Prenotazione {
      *
      * @param description the task content
      */
-    public Prenotazione(String description, Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
+    public Prenotazione(Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
         this.id = 0;
-        this.descrizione = description;
         this.data = data;
         this.oraInizio = oraInizio;
         this.oraFine = oraFine;
         this.clienti = clienti;
         this.ufficioId = ufficioId;
-        this.utenteId=utenteId;
+        this.utenteId = utenteId;
     }
 
 
@@ -72,10 +68,6 @@ public class Prenotazione {
 
     public int getId() {
         return id;
-    }
-
-    public String getDescrizione() {
-        return descrizione;
     }
 
     public Date getData() {
