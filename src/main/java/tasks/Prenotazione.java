@@ -2,7 +2,6 @@ package tasks;
 
 
 import java.sql.Date;
-import java.sql.Time;
 
 
 /**
@@ -13,17 +12,17 @@ public class Prenotazione {
     // the unique id of the office
     private int id;
 
-    private Date data;
+    private Date date;
 
-    private int oraInizio;
+    private int startHour;
 
-    private int oraFine;
+    private int finalHour;
 
-    private int clienti;
+    private int clients;
 
-    private int ufficioId;
+    private int officeId;
 
-    private String utenteId;
+    private String userId;
 
 
 
@@ -36,14 +35,14 @@ public class Prenotazione {
      *
      * @param id represents the reservation unique identifier
      */
-    public Prenotazione(int id, Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
+    public Prenotazione(int id, Date date, int startHour, int finalHour, int clients, int officeId, String userId) {
         this.id = id;
-        this.data = data;
-        this.oraInizio = oraInizio;
-        this.oraFine = oraFine;
-        this.clienti = clienti;
-        this.ufficioId = ufficioId;
-        this.utenteId = utenteId;
+        this.date = date;
+        this.startHour = startHour;
+        this.finalHour = finalHour;
+        this.clients = clients;
+        this.officeId = officeId;
+        this.userId = userId;
     }
 
 
@@ -51,14 +50,14 @@ public class Prenotazione {
      * Overloaded constructor. It create a reservation without a given id.
      *
      */
-    public Prenotazione(Date data, int oraInizio, int oraFine, int clienti, int ufficioId, String utenteId) {
-        this.id = 0;
-        this.data = data;
-        this.oraInizio = oraInizio;
-        this.oraFine = oraFine;
-        this.clienti = clienti;
-        this.ufficioId = ufficioId;
-        this.utenteId = utenteId;
+    public Prenotazione(Date date, int startHour, int finalHour, int clients, int officeId, String userId) {
+        this.id = id;
+        this.date = date;
+        this.startHour = startHour;
+        this.finalHour = finalHour;
+        this.clients = clients;
+        this.officeId = officeId;
+        this.userId = userId;
     }
 
 
@@ -68,27 +67,27 @@ public class Prenotazione {
         return id;
     }
 
-    public Date getData() {
-        return data;
+    public Date getDate() {
+        return date;
     }
 
-    public int getOraInizio() {
-        return oraInizio;
+    public int getStartHour() {
+        return startHour;
     }
 
-    public int getOraFine() {
-        return oraFine;
+    public int getFinalHour() {
+        return finalHour;
     }
 
-    public int getClienti(){
-        return clienti;
+    public int getClients(){
+        return clients;
     }
 
-    public int getUfficioId() {
-        return ufficioId;
+    public int getOfficeId() {
+        return officeId;
     }
 
-    public String getUtenteId(){
-        return utenteId;
+    public String getUserId(){
+        return userId;
     }
 }

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.sql.Date;
 
 /**
  * The DAO for the {@code Task} class.
@@ -36,7 +37,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while(rs.next()) {
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"), rs.getInt("ufficio_id"), rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -140,12 +141,12 @@ public class GestionePrenotazione {
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setDate(1, newReservation.getData());
-            st.setInt(2, newReservation.getOraInizio());
-            st.setInt(3, newReservation.getOraFine());
-            st.setInt(4, newReservation.getClienti());
-            st.setInt(5, newReservation.getUfficioId());
-            st.setString(6, newReservation.getUtenteId());
+            st.setDate(1, newReservation.getDate());
+            st.setInt(2, newReservation.getStartHour());
+            st.setInt(3, newReservation.getFinalHour());
+            st.setInt(4, newReservation.getClients());
+            st.setInt(5, newReservation.getOfficeId());
+            st.setString(6, newReservation.getUserId());
 
             st.executeUpdate();
 
@@ -165,7 +166,6 @@ public class GestionePrenotazione {
             st.setInt(1, id);
 
             st.executeUpdate();
-
             conn.close();
 
         } catch (SQLException e) {
@@ -173,17 +173,16 @@ public class GestionePrenotazione {
         }
     }
 
-    public void deleteReservation(int oraInizio, int ufficioId, String utenteId)
+    public void deleteReservation(int startHour, int officeId, String userId)
     {
-        Prenotazione Reservation = null;
         final String sql = "DELETE FROM prenotazioni WHERE ora_inizio = ? AND ufficio_id = ? AND utente_id = ?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, oraInizio);
-            st.setInt(2, ufficioId);
-            st.setString(3, utenteId);
+            st.setInt(1, startHour);
+            st.setInt(2, officeId);
+            st.setString(3, userId);
 
             st.executeUpdate();
             conn.close();
@@ -193,8 +192,8 @@ public class GestionePrenotazione {
         }
     }
 
-    public List<Slot> getSlots(int ufficioId) {
-        List<Prenotazione> allReservationsOffice = getAllReservationsOffice(ufficioId);
+    public List<Slot> getSlots(int officeId) {
+        List<Prenotazione> allReservationsOffice = getAllReservationsOffice(officeId);
 
         int startHour = 8;
         int finalHour = 20;
@@ -204,6 +203,10 @@ public class GestionePrenotazione {
 
         List<Slot> slots = new LinkedList<>();
         LocalDate date = startDate;
+
+        String userIdRaw = JWTfun.getUserId();
+        String userId = userIdRaw.substring(1, userIdRaw.length()-1);
+
         while(!date.equals(finalDate)){
             if(date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
                 date = date.plusDays(1);
@@ -221,11 +224,12 @@ public class GestionePrenotazione {
             } else nowHour = 8;
 
             for (int hour=nowHour; hour<finalHour; hour++){
-                int state = contains(allReservationsOffice, hour);
+                int state = contains(allReservationsOffice, hour, userId, date);
                 if(state == 0) // Lo slot è libero
-                    slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), true));
-                else if(state == 2)
-                    slots.add(new Slot(hour + "-" + Integer.toString(hour+1), date.toString(), false));
+                    slots.add(new Slot(hour + ":00-" + Integer.toString(hour+1) + ":00", Date.valueOf(date), true));
+                else if(state == 2) {
+                    slots.add(new Slot(hour + ":00-" + Integer.toString(hour+1) + ":00", Date.valueOf(date), false));
+                }
             }
             date = date.plusDays(1);
         }
@@ -238,12 +242,10 @@ public class GestionePrenotazione {
      * @return 1 -> contiene la prenotazione, lo slot è occupato da un altro utente
      * @return 2 -> contiene la prenotazione, lo slot è occupato dall'utente che ha fatto la richiesta
      */
-    private static int contains(List<Prenotazione> allReservationsOffice, int oraInizio){
+    private static int contains(List<Prenotazione> allReservationsOffice, int startHour, String userId, LocalDate date){
         for(Prenotazione prenotazione : allReservationsOffice){
-            if(prenotazione.getOraInizio() == oraInizio) {
-                String utenteId = JWTfun.getUserId();
-                String utenteIdFinal = utenteId.substring(1, utenteId.length()-1);
-                if(prenotazione.getUtenteId().equals(utenteIdFinal))
+            if(prenotazione.getStartHour() == startHour && prenotazione.getDate().equals(Date.valueOf(date))) {
+                if(prenotazione.getUserId().equals(userId))
                     return 2;
                 else
                     return 1;

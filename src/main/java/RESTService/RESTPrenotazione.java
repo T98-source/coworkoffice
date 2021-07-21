@@ -26,24 +26,22 @@ public class RESTPrenotazione {
                 response.status(200);
 
                 String usertype = JWTfun.getUserType();
-                String userIdraw = JWTfun.getUserId();
-                String userId = userIdraw.substring(1,userIdraw.length()-1);
-                System.out.println("id: " + userId); //<- test di prova per vedere cosa stampa
-                if(usertype.contains("admin")) {
-                    // get all tasks from the DB
-                    List<Prenotazione> allReservations = ReservationDao.getAllReservations();
-                    // prepare the JSON-related structure to return
-                    Map<String, List<Prenotazione>> finalJson = new HashMap<>();
-                    finalJson.put("reservations", allReservations);
+                String userIdRaw = JWTfun.getUserId();
+                String userId = userIdRaw.substring(1,userIdRaw.length()-1);
 
-                return allReservations; }else if(usertype.contains("user"))
-                {
-                    List<Prenotazione> allReservations = ReservationDao.getAllReservationsUser(userId);
-                    // prepare the JSON-related structure to return
-                    Map<String, List<Prenotazione>> finalJson = new HashMap<>();
-                    finalJson.put("Reservations", allReservations);
-                    return allReservations;
-                } else return halt(401);
+                List<Prenotazione> allReservations = new LinkedList<>();
+
+                if(usertype.contains("admin"))
+                    allReservations = ReservationDao.getAllReservations();
+                else if(usertype.contains("user"))
+                    allReservations = ReservationDao.getAllReservationsUser(userId);
+                else
+                    return halt(401);
+
+                Map<String, List<Prenotazione>> finalJson = new HashMap<>();
+                finalJson.put("Reservations", allReservations);
+                return allReservations;
+
             }, gson::toJson);
 
 
@@ -109,36 +107,35 @@ public class RESTPrenotazione {
             });
 
             // get all slots available
-            get(baseURL + "/slots/:ufficioId", (request, response) -> {
+            get(baseURL + "/slots/:officeId", (request, response) -> {
                 // set a proper response code and type
                 response.type("application/json");
                 response.status(200);
 
-                List<Slot> slots = ReservationDao.getSlots(Integer.valueOf(request.params(":ufficioId")));
+                List<Slot> slots = ReservationDao.getSlots(Integer.valueOf(request.params(":officeId")));
 
                 return slots;
             }, gson::toJson);
 
-            post(baseURL + "/slots/:ufficioId/:clienti", "application/json", (request, response) -> {
+            post(baseURL + "/slots/:officeId/:clients", "application/json", (request, response) -> {
                 // get the body of the HTTP request
                 Map addRequest = gson.fromJson(request.body(), Map.class);
 
                 // check whether everything is in place
-                if(addRequest!=null && addRequest.containsKey("orario") && addRequest.containsKey("data")) {
-                    String orario = String.valueOf(addRequest.get("orario"));
-                    String data = String.valueOf(addRequest.get("data"));
+                if(addRequest!=null && addRequest.containsKey("schedule") && addRequest.containsKey("date")) {
+                    String schedule = String.valueOf(addRequest.get("schedule"));
+                    Date date = Date.valueOf(addRequest.get("date").toString());
 
-                    Date date = Date.valueOf(data);
-                    int i = orario.indexOf('-');
-                    int oraInizio = Integer.valueOf(orario.substring(0, i));
-                    int oraFine = Integer.valueOf(orario.substring(i+1, orario.length()));
-                    String utenteId = JWTfun.getUserId();
-                    String utenteIdFinal = utenteId.substring(1, utenteId.length()-1);
-                    int clienti = Integer.valueOf(request.params(":clienti"));
-                    int ufficioId = Integer.valueOf(request.params(":ufficioId"));
+                    int i = schedule.indexOf(':');
+                    int startHour = Integer.valueOf(schedule.substring(0, i));
+                    int finalHour = Integer.valueOf(schedule.substring(i+1, schedule.length()));
+                    String userIdRaw = JWTfun.getUserId();
+                    String userId = userIdRaw.substring(1, userIdRaw.length()-1);
+                    int clients = Integer.valueOf(request.params(":clients"));
+                    int officeId = Integer.valueOf(request.params(":officeId"));
 
-                    Prenotazione prenotazione = new Prenotazione(date, oraInizio, oraFine, clienti, ufficioId, utenteIdFinal);
-                    ReservationDao.addReservation(prenotazione);
+                    Prenotazione reservation = new Prenotazione(date, startHour, finalHour, clients, officeId, userId);
+                    ReservationDao.addReservation(reservation);
 
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
@@ -150,20 +147,20 @@ public class RESTPrenotazione {
                 return "";
             }, gson::toJson);
 
-            delete(baseURL + "/slots/:ufficioId", "application/json", (request, response) -> {
+            delete(baseURL + "/slots/:officeId", "application/json", (request, response) -> {
                 // get the body of the HTTP request
                 Map deleteRequest = gson.fromJson(request.body(), Map.class);
 
-                if(deleteRequest!=null && deleteRequest.containsKey("orario") && deleteRequest.containsKey("data")) {
-                    String orario = String.valueOf(deleteRequest.get("orario"));
-                    String data = String.valueOf(deleteRequest.get("data"));
+                if(deleteRequest!=null && deleteRequest.containsKey("schedule") && deleteRequest.containsKey("date")) {
+                    String schedule = String.valueOf(deleteRequest.get("schedule"));
+                    String date = String.valueOf(deleteRequest.get("date"));
 
-                    int ufficioId = Integer.valueOf(request.params(":ufficioId"));
-                    int i = orario.indexOf('-');
-                    int oraInizio = Integer.valueOf(orario.substring(0, i));
-                    String utenteId = JWTfun.getUserId();
-
-                    ReservationDao.deleteReservation(oraInizio, ufficioId, utenteId);
+                    int officeId = Integer.valueOf(request.params(":officeId"));
+                    int i = schedule.indexOf(':');
+                    int startHour = Integer.valueOf(schedule.substring(0, i));
+                    String userIdRaw = JWTfun.getUserId();
+                    String userId = userIdRaw.substring(1, userIdRaw.length()-1);
+                    ReservationDao.deleteReservation(startHour, officeId, userId);
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
                 }

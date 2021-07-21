@@ -8,21 +8,21 @@ public class Ufficio {
     // the unique id of the office
     private int id;
 
-    private String descrizione;
+    private String description;
 
-    private String tipo;
+    private String type;
 
 
     /**
      * Office main constructor.
      *
      * @param id represents the office unique identifier
-     * @param descrizione the office description
+     * @param description the office description
      */
-    public Ufficio(int id, String descrizione, String tipo) {
+    public Ufficio(int id, String description, String type) {
         this.id = id;
-        this.descrizione = descrizione;
-        this.tipo = tipo;
+        this.description = description;
+        this.type = type;
     }
 
 
@@ -31,10 +31,10 @@ public class Ufficio {
      *
      * @param description the task content
      */
-    public Ufficio(String description, String tipo) {
+    public Ufficio(String description, String type) {
         this.id = 0;
-        this.descrizione = description;
-        this.tipo = tipo;
+        this.description = description;
+        this.type = type;
     }
 
 
@@ -44,11 +44,11 @@ public class Ufficio {
         return id;
     }
 
-    public String getDescrizione() {
-        return descrizione;
+    public String getDescription() {
+        return description;
     }
-    public String getTipo() {
-        return tipo;
+    public String getType() {
+        return type;
     }
 
 }

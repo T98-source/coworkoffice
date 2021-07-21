@@ -83,8 +83,8 @@ public class GestioneUfficio {
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, newOffice.getDescrizione());
-            st.setString(2, newOffice.getTipo());
+            st.setString(1, newOffice.getDescription());
+            st.setString(2, newOffice.getType());
 
             st.executeUpdate();
 

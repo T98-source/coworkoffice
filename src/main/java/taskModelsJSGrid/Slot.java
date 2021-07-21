@@ -1,14 +1,16 @@
 package taskModelsJSGrid;
 
+import java.sql.Date;
+
 public class Slot {
 
-    private String orario;
-    private String data;
-    private boolean libero;
+    private String schedule;
+    private Date date;
+    private boolean free;
 
-    public Slot(String orario, String data, boolean libero){
-        this.orario = orario;
-        this.data = data;
-        this.libero = libero;
+    public Slot(String schedule, Date date, boolean free){
+        this.schedule = schedule;
+        this.date = date;
+        this.free = free;
     }
 }
