@@ -1,6 +1,7 @@
 package tasksDao;
 
 import jwtToken.jwtlib.JWTfun;
+import spark.QueryParamsMap;
 import taskModelsJSGrid.Slot;
 import tasks.Prenotazione;
 import utils.DBConnect;
@@ -15,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.sql.Date;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * The DAO for the {@code Task} class.
@@ -24,8 +27,9 @@ public class GestionePrenotazione {
     /**
      * Get all reservations from the DB
      * @return a list of Reservation, or an empty list if no reservations are available
+     * @param queryParamsMap
      */
-    public List<Prenotazione> getAllReservations() {
+    public List<Prenotazione> getAllReservations(QueryParamsMap queryParamsMap) {
         final String sql = "SELECT id, data_p , ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni";
 
         List<Prenotazione> reservations = new LinkedList<>();
@@ -58,7 +62,7 @@ public class GestionePrenotazione {
         return reservations;
     }
 
-    public List<Prenotazione> getAllReservationsUser(String utenteId) {
+    public List<Prenotazione> getAllReservationsUser(String utenteId, QueryParamsMap queryParamsMap) {
         final String sql = "SELECT id, data_p, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id = ?";
 
         List<Prenotazione> reservations = new LinkedList<>();
@@ -80,9 +84,46 @@ public class GestionePrenotazione {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return reservations;
+
+        return where(queryParamsMap, reservations);
     }
 
+    private List<Prenotazione> where(QueryParamsMap queryParamsMap, List<Prenotazione> reservations){
+        if(queryParamsMap.hasKey("date") && queryParamsMap.get("date").value().length() != 0){
+            for(int i = 0; i<reservations.size(); i++){
+                if(!reservations.get(i).getDate().toLowerCase().contains(queryParamsMap.get("date").value().toLowerCase())){
+                    reservations.remove(i);
+                    i--;
+                }
+            }
+        }
+        if(queryParamsMap.hasKey("startHour")){
+            for(int i = 0; i<reservations.size(); i++){
+                if(!String.valueOf(reservations.get(i).getStartHour()).contains(queryParamsMap.get("startHour").value())) {
+                    reservations.remove(i);
+                    i--;
+                }
+            }
+        }
+        if(queryParamsMap.hasKey("finalHour")){
+            for(int i = 0; i<reservations.size(); i++){
+                if(!String.valueOf(reservations.get(i).getFinalHour()).contains(queryParamsMap.get("finalHour").value())){
+                    reservations.remove(i);
+                    i--;
+                }
+            }
+        }
+        if(queryParamsMap.hasKey("officeId")){
+            for(int i = 0; i<reservations.size(); i++){
+                if(!String.valueOf(reservations.get(i).getOfficeId()).contains(queryParamsMap.get("officeId").value())){
+                    reservations.remove(i);
+                    i--;
+                }
+            }
+        }
+
+        return reservations;
+    }
 
     public List<Prenotazione> getAllReservationsOffice(int ufficioId) {
         final String sql = "SELECT id, data_p, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE ufficio_id = ?";

@@ -1,5 +1,7 @@
 package tasksDao;
 
+import spark.QueryParamsMap;
+import tasks.Prenotazione;
 import tasks.Ufficio;
 import utils.DBConnect;
 
@@ -18,8 +20,9 @@ public class GestioneUfficio {
     /**
      * Get all offices from the DB
      * @return a list of office, or an empty list if no offices are available
+     * @param queryParamsMap
      */
-    public List<Ufficio> getAllOffices() {
+    public List<Ufficio> getAllOffices(QueryParamsMap queryParamsMap) {
         final String sql = "SELECT id, descrizione, tipo FROM locali WHERE tipo = 'ufficio'";
 
         List<Ufficio> offices = new LinkedList<>();
@@ -41,9 +44,20 @@ public class GestioneUfficio {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return offices;
+        return where(queryParamsMap, offices);
     }
 
+    private List<Ufficio> where(QueryParamsMap queryParamsMap, List<Ufficio> offices){
+        if(queryParamsMap.hasKey("description") && queryParamsMap.get("description").value().length() != 0){
+            for(int i = 0; i<offices.size(); i++){
+                if(!offices.get(i).getDescription().toLowerCase().contains(queryParamsMap.get("description").value().toLowerCase())) {
+                    offices.remove(i);
+                    i--;
+                }
+            }
+        }
+        return offices;
+    }
     /**
      * Get a single task from the DB
      * @param id of the task to retrieve

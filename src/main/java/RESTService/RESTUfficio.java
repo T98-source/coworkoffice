@@ -24,7 +24,7 @@ public class RESTUfficio {
             response.status(200);
 
             // get all tasks from the DB
-            List<Ufficio> allOffices = officeDao.getAllOffices();
+            List<Ufficio> allOffices = officeDao.getAllOffices(request.queryMap());
             // prepare the JSON-related structure to return
             Map<String, List<Ufficio>> finalJson = new HashMap<>();
             finalJson.put("offices", allOffices);

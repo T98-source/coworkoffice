@@ -1,6 +1,7 @@
 package RESTService;
 
 import com.google.gson.Gson;
+import spark.QueryParamsMap;
 import tasks.Prenotazione;
 import taskModelsJSGrid.Slot;
 import tasksDao.GestionePrenotazione;
@@ -31,9 +32,9 @@ public class RESTPrenotazione {
                 List<Prenotazione> allReservations = new LinkedList<>();
 
                 if(usertype.contains("admin"))
-                    allReservations = ReservationDao.getAllReservations();
+                    allReservations = ReservationDao.getAllReservations(request.queryMap());
                 else if(usertype.contains("user"))
-                    allReservations = ReservationDao.getAllReservationsUser(userId);
+                    allReservations = ReservationDao.getAllReservationsUser(userId, request.queryMap());
                 else
                     return halt(401);
 
