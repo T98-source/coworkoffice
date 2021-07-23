@@ -5,10 +5,10 @@ import java.sql.Date;
 public class Slot {
 
     private String schedule;
-    private Date date;
+    private String date;
     private boolean free;
 
-    public Slot(String schedule, Date date, boolean free){
+    public Slot(String schedule, String date, boolean free){
         this.schedule = schedule;
         this.date = date;
         this.free = free;

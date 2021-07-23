@@ -26,7 +26,7 @@ public class GestionePrenotazione {
      * @return a list of Reservation, or an empty list if no reservations are available
      */
     public List<Prenotazione> getAllReservations() {
-        final String sql = "SELECT id, data , ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni";
+        final String sql = "SELECT id, data_p , ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
@@ -36,9 +36,18 @@ public class GestionePrenotazione {
 
             ResultSet rs = st.executeQuery();
 
+            Prenotazione old = null;
             while(rs.next()) {
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"), rs.getInt("ufficio_id"), rs.getString("utente_id"));
-                reservations.add(t);
+                if(old == null){
+                    old = new Prenotazione(rs.getInt("id"), rs.getString("data_p"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"), rs.getInt("ufficio_id"), rs.getString("utente_id"));
+                }
+                else if(old.getFinalHour() == rs.getInt("ora_fine") && old.getDate().equals(rs.getString("data_p")) && old.getOfficeId() == rs.getInt("ufficio_id") && old.getUserId() == rs.getString("utente_id"))
+                    old = new Prenotazione(old.getId(), old.getDate(), old.getStartHour(), rs.getInt("ora_fine"), old.getClients() + rs.getInt("clienti"), old.getOfficeId(), old.getUserId());
+                else {
+                    reservations.add(old);
+                    Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("data_p"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"), rs.getInt("ufficio_id"), rs.getString("utente_id"));
+                    reservations.add(t);
+                }
             }
 
             conn.close();
@@ -50,7 +59,7 @@ public class GestionePrenotazione {
     }
 
     public List<Prenotazione> getAllReservationsUser(String utenteId) {
-        final String sql = "SELECT id, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id = ?";
+        final String sql = "SELECT id, data_p, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE utente_id = ?";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
@@ -62,7 +71,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while(rs.next()) {
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("data_p"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
                 reservations.add(t);
             }
 
@@ -76,7 +85,7 @@ public class GestionePrenotazione {
 
 
     public List<Prenotazione> getAllReservationsOffice(int ufficioId) {
-        final String sql = "SELECT id, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE ufficio_id = ?";
+        final String sql = "SELECT id, data_p, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE ufficio_id = ?";
 
         List<Prenotazione> reservations = new LinkedList<>();
 
@@ -89,7 +98,7 @@ public class GestionePrenotazione {
 
             while(rs.next()) {
                 String utenteId = rs.getString("utente_id");
-                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"), ufficioId, utenteId);
+                Prenotazione t = new Prenotazione(rs.getInt("id"), rs.getString("data_p"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"), ufficioId, utenteId);
                 reservations.add(t);
             }
 
@@ -110,7 +119,7 @@ public class GestionePrenotazione {
     public Prenotazione getReservation(int id)
     {
         Prenotazione Reservation = null;
-        final String sql = "SELECT id, data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE id = ?";
+        final String sql = "SELECT id, data_p, ora_inizio, ora_fine, clienti, ufficio_id, utente_id FROM prenotazioni WHERE id = ?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -120,7 +129,7 @@ public class GestionePrenotazione {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                Reservation = new Prenotazione(id, rs.getDate("data"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
+                Reservation = new Prenotazione(id, rs.getString("data_p"), rs.getInt("ora_inizio"), rs.getInt("ora_fine"), rs.getInt("clienti"),rs.getInt("ufficio_id"),rs.getString("utente_id"));
             }
 
             conn.close();
@@ -136,12 +145,12 @@ public class GestionePrenotazione {
      * @param newReservation the Reservation to be added
      */
     public void addReservation(Prenotazione newReservation) {
-        final String sql = "INSERT INTO prenotazioni (data, ora_inizio, ora_fine, clienti, ufficio_id, utente_id) VALUES (?,?,?,?,?,?)";
+        final String sql = "INSERT INTO prenotazioni (data_p, ora_inizio, ora_fine, clienti, ufficio_id, utente_id) VALUES (?,?,?,?,?,?)";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setDate(1, newReservation.getDate());
+            st.setString(1, newReservation.getDate());
             st.setInt(2, newReservation.getStartHour());
             st.setInt(3, newReservation.getFinalHour());
             st.setInt(4, newReservation.getClients());
@@ -173,16 +182,17 @@ public class GestionePrenotazione {
         }
     }
 
-    public void deleteReservation(int startHour, int officeId, String userId)
+    public void deleteReservation(String date, int startHour, int officeId, String userId)
     {
-        final String sql = "DELETE FROM prenotazioni WHERE ora_inizio = ? AND ufficio_id = ? AND utente_id = ?";
+        final String sql = "DELETE FROM prenotazioni WHERE data_p = ? AND ora_inizio = ? AND ufficio_id = ? AND utente_id = ?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, startHour);
-            st.setInt(2, officeId);
-            st.setString(3, userId);
+            st.setString(1, date);
+            st.setInt(2, startHour);
+            st.setInt(3, officeId);
+            st.setString(4, userId);
 
             st.executeUpdate();
             conn.close();
@@ -226,9 +236,9 @@ public class GestionePrenotazione {
             for (int hour=nowHour; hour<finalHour; hour++){
                 int state = contains(allReservationsOffice, hour, userId, date);
                 if(state == 0) // Lo slot è libero
-                    slots.add(new Slot(hour + ":00-" + Integer.toString(hour+1) + ":00", Date.valueOf(date), true));
+                    slots.add(new Slot(hour + ":00-" + Integer.toString(hour+1) + ":00", Date.valueOf(date).toString(), true));
                 else if(state == 2) {
-                    slots.add(new Slot(hour + ":00-" + Integer.toString(hour+1) + ":00", Date.valueOf(date), false));
+                    slots.add(new Slot(hour + ":00-" + Integer.toString(hour+1) + ":00", Date.valueOf(date).toString(), false));
                 }
             }
             date = date.plusDays(1);
@@ -243,8 +253,9 @@ public class GestionePrenotazione {
      * @return 2 -> contiene la prenotazione, lo slot è occupato dall'utente che ha fatto la richiesta
      */
     private static int contains(List<Prenotazione> allReservationsOffice, int startHour, String userId, LocalDate date){
+        String dateString = Date.valueOf(date).toString();
         for(Prenotazione prenotazione : allReservationsOffice){
-            if(prenotazione.getStartHour() == startHour && prenotazione.getDate().equals(Date.valueOf(date))) {
+            if(prenotazione.getStartHour() == startHour && prenotazione.getDate().equals(dateString)) {
                 if(prenotazione.getUserId().equals(userId))
                     return 2;
                 else

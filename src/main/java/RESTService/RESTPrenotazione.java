@@ -5,7 +5,6 @@ import tasks.Prenotazione;
 import taskModelsJSGrid.Slot;
 import tasksDao.GestionePrenotazione;
 
-import java.sql.Date;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -64,35 +63,6 @@ public class RESTPrenotazione {
                 return finalJson;
             }, gson::toJson);
 
-            // add a new task
-            post(baseURL + "/reservations", "application/json", (request, response) -> {
-                // get the body of the HTTP request
-                Map addRequest = gson.fromJson(request.body(), Map.class);
-                Prenotazione prenotazione = null;
-                // check whether everything is in place
-                if(addRequest!=null && addRequest.containsKey("descrizione") && addRequest.containsKey("data") && addRequest.containsKey("oraInizio") && addRequest.containsKey("oraFine") && addRequest.containsKey("clienti") && addRequest.containsKey("ufficioId") && addRequest.containsKey("utenteId")) {
-                    String descrizione = String.valueOf(addRequest.get("descrizione"));
-                    Date data = Date.valueOf(String.valueOf(addRequest.get("data")));
-                    int oraInizio = Integer.valueOf(String.valueOf(addRequest.get("oraInizio")));
-                    int oraFine = Integer.valueOf(String.valueOf(addRequest.get("oraFine")));
-                    int clienti = Integer.parseInt(String.valueOf(addRequest.get("clienti")));
-                    int ufficioId = Integer.parseInt(String.valueOf(addRequest.get("ufficioId")));
-                    String utenteId = String.valueOf(addRequest.get("utenteId"));
-
-                    // add the task into the DB
-                    prenotazione = new Prenotazione(data, oraInizio, oraFine, clienti, ufficioId,utenteId);
-                    ReservationDao.addReservation(prenotazione);
-
-                    // if success, prepare a suitable HTTP response code
-                    response.status(201);
-                }
-                else {
-                    halt(403);
-                }
-
-                return prenotazione;
-            }, gson::toJson);
-
 
             delete(baseURL + "/reservations/:id", "application/json", (request, response) -> {
                 if(request.params(":id")!=null) {
@@ -124,11 +94,11 @@ public class RESTPrenotazione {
                 // check whether everything is in place
                 if(addRequest!=null && addRequest.containsKey("schedule") && addRequest.containsKey("date")) {
                     String schedule = String.valueOf(addRequest.get("schedule"));
-                    Date date = Date.valueOf(addRequest.get("date").toString());
+                    String date = String.valueOf(addRequest.get("date"));
 
                     int i = schedule.indexOf(':');
                     int startHour = Integer.valueOf(schedule.substring(0, i));
-                    int finalHour = Integer.valueOf(schedule.substring(i+1, schedule.length()));
+                    int finalHour = Integer.valueOf(schedule.substring(i+4, schedule.length()-3));
                     String userIdRaw = JWTfun.getUserId();
                     String userId = userIdRaw.substring(1, userIdRaw.length()-1);
                     int clients = Integer.valueOf(request.params(":clients"));
@@ -160,7 +130,7 @@ public class RESTPrenotazione {
                     int startHour = Integer.valueOf(schedule.substring(0, i));
                     String userIdRaw = JWTfun.getUserId();
                     String userId = userIdRaw.substring(1, userIdRaw.length()-1);
-                    ReservationDao.deleteReservation(startHour, officeId, userId);
+                    ReservationDao.deleteReservation(date, startHour, officeId, userId);
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
                 }

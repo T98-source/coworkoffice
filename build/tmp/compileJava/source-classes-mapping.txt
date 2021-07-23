@@ -18,14 +18,14 @@ RESTService/RESTAttuatore.java
  RESTService.RESTAttuatore
 jwtToken/verifySignature.java
  jwtToken.verifySignature
-tasksDao/GestionePrenotazione.java
- tasksDao.GestionePrenotazione
-tasks/Prenotazione.java
- tasks.Prenotazione
+tasks/Sensore.java
+ tasks.Sensore
+RESTService/RESTSensore.java
+ RESTService.RESTSensore
 tasks/Utente.java
  tasks.Utente
-taskModelsJSGrid/Slot.java
- taskModelsJSGrid.Slot
+tasks/Attuatore.java
+ tasks.Attuatore
 tasksDao/GestioneMisura.java
  tasksDao.GestioneMisura
 tasks/Misura.java
@@ -34,13 +34,13 @@ jwtToken/jwtlib/JWTfun.java
  jwtToken.jwtlib.JWTfun
 utils/DBConnect.java
  utils.DBConnect
-tasks/Attuatore.java
- tasks.Attuatore
-RESTService/RESTSensore.java
- RESTService.RESTSensore
-tasks/Sensore.java
- tasks.Sensore
+taskModelsJSGrid/Slot.java
+ taskModelsJSGrid.Slot
+tasks/Prenotazione.java
+ tasks.Prenotazione
 TasksService.java
  TasksService
+tasksDao/GestionePrenotazione.java
+ tasksDao.GestionePrenotazione
 RESTService/RESTPrenotazione.java
  RESTService.RESTPrenotazione

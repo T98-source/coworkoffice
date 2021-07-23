@@ -12,7 +12,7 @@ public class Prenotazione {
     // the unique id of the office
     private int id;
 
-    private Date date;
+    private String date;
 
     private int startHour;
 
@@ -35,7 +35,7 @@ public class Prenotazione {
      *
      * @param id represents the reservation unique identifier
      */
-    public Prenotazione(int id, Date date, int startHour, int finalHour, int clients, int officeId, String userId) {
+    public Prenotazione(int id, String date, int startHour, int finalHour, int clients, int officeId, String userId) {
         this.id = id;
         this.date = date;
         this.startHour = startHour;
@@ -50,7 +50,7 @@ public class Prenotazione {
      * Overloaded constructor. It create a reservation without a given id.
      *
      */
-    public Prenotazione(Date date, int startHour, int finalHour, int clients, int officeId, String userId) {
+    public Prenotazione(String date, int startHour, int finalHour, int clients, int officeId, String userId) {
         this.id = id;
         this.date = date;
         this.startHour = startHour;
@@ -66,8 +66,7 @@ public class Prenotazione {
     public int getId() {
         return id;
     }
-
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
