@@ -1,3 +1,4 @@
+import MQTT.GestioneMisureLocaliMQTT;
 import RESTService.*;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.google.gson.Gson;
@@ -61,5 +62,9 @@ public class TasksService {
         RESTSensore.REST(gson, baseURL);
         RESTMisura.REST(gson, baseURL);
         RESTUtente.REST(gson, baseURL);
+
+
+        GestioneMisureLocaliMQTT subscriber = new GestioneMisureLocaliMQTT();
+        subscriber.start();
     }
 }
