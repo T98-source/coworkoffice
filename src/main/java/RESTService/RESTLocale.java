@@ -1,8 +1,8 @@
 package RESTService;
 
 import com.google.gson.Gson;
-import tasks.Ufficio;
-import tasksDao.GestioneUfficio;
+import tasks.Locale;
+import tasksDao.GestioneLocale;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +11,23 @@ import java.util.Map;
 import static spark.Spark.*;
 import static spark.Spark.halt;
 
-public class RESTUfficio {
+public class RESTLocale {
 
     public static void REST(Gson gson, String baseURL){
 
-        GestioneUfficio officeDao = new GestioneUfficio();
+        GestioneLocale localDao = new GestioneLocale();
+
+        // get all the tasks
+        get(baseURL + "/locals", (request, response) -> {
+            // set a proper response code and type
+            response.type("application/json");
+            response.status(200);
+
+            // get all tasks from the DB
+            List<Locale> allLocals = localDao.getAllLocals(request.queryMap());
+
+            return allLocals;
+        }, gson::toJson);
 
         // get all the tasks
         get(baseURL + "/offices", (request, response) -> {
@@ -24,10 +36,7 @@ public class RESTUfficio {
             response.status(200);
 
             // get all tasks from the DB
-            List<Ufficio> allOffices = officeDao.getAllOffices(request.queryMap());
-            // prepare the JSON-related structure to return
-            Map<String, List<Ufficio>> finalJson = new HashMap<>();
-            finalJson.put("offices", allOffices);
+            List<Locale> allOffices = localDao.getAllOffices(request.queryMap());
 
             return allOffices;
         }, gson::toJson);
@@ -36,7 +45,7 @@ public class RESTUfficio {
         // get a single task
         get(baseURL + "/offices/:id", "application/json", (request, response) -> {
             // get the id from the URL
-            Ufficio office = officeDao.getOffice(Integer.valueOf(request.params(":id")));
+            Locale office = localDao.getOffice(Integer.valueOf(request.params(":id")));
 
             // no task? 404!
             if(office==null)
@@ -44,7 +53,7 @@ public class RESTUfficio {
 
             // prepare the JSON-related structure to return
             // and the suitable HTTP response code and type
-            Map<String, Ufficio> finalJson = new HashMap<>();
+            Map<String, Locale> finalJson = new HashMap<>();
             finalJson.put("office", office);
             response.status(200);
             response.type("application/json");
@@ -57,15 +66,15 @@ public class RESTUfficio {
             {
                 // get the body of the HTTP request
                 Map addRequest = gson.fromJson(request.body(), Map.class);
-                Ufficio ufficio = null;
+                Locale ufficio = null;
                 // check whether everything is in place
                 if (addRequest != null && addRequest.containsKey("descrizione")) {
                     String descrizione = String.valueOf(addRequest.get("descrizione"));
                     String tipo = "ufficio";
 
                     // add the task into the DB
-                    ufficio = new Ufficio(descrizione, tipo);
-                    officeDao.addOffice(ufficio);
+                    ufficio = new Locale(descrizione, tipo);
+                    localDao.addOffice(ufficio);
 
                     // if success, prepare a suitable HTTP response code
                     response.status(201);
@@ -82,9 +91,8 @@ public class RESTUfficio {
             {
                 if(request.params(":id")!=null) {
                     // add the task into the DB
-                officeDao.deleteOffice(Integer.parseInt(String.valueOf(request.params(":id"))));
+                    localDao.deleteOffice(Integer.parseInt(String.valueOf(request.params(":id"))));
                     response.status(201);
-
                 }
                 else {
                     halt(403);

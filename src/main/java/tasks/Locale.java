@@ -3,7 +3,7 @@ package tasks;
 /**
  * Describe a Task with its properties.
  */
-public class Ufficio {
+public class Locale {
 
     // the unique id of the office
     private int id;
@@ -19,7 +19,7 @@ public class Ufficio {
      * @param id represents the office unique identifier
      * @param description the office description
      */
-    public Ufficio(int id, String description, String type) {
+    public Locale(int id, String description, String type) {
         this.id = id;
         this.description = description;
         this.type = type;
@@ -31,7 +31,7 @@ public class Ufficio {
      *
      * @param description the task content
      */
-    public Ufficio(String description, String type) {
+    public Locale(String description, String type) {
         this.id = 0;
         this.description = description;
         this.type = type;

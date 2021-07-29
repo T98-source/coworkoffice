@@ -8,24 +8,26 @@ public class Attuatore {
     // the unique id of the office
     private int id;
 
-    private String descrizione;
+    private String description;
 
-    private int stato;
+    private int state;
 
-    private int locale_id;
+    private int manual;
+
+    private int sensorId;
 
 
     /**
      * Office main constructor.
      *
      * @param id represents the office unique identifier
-     * @param descrizione the office description
      */
-    public Attuatore(int id, String descrizione, int stato, int locale_id) {
+    public Attuatore(int id, String description, int state, int manual, int sensorId) {
         this.id = id;
-        this.descrizione = descrizione;
-        this.stato = stato;
-        this.locale_id=locale_id;
+        this.description = description;
+        this.state = state;
+        this.manual = manual;
+        this.sensorId = sensorId;
     }
 
 
@@ -34,11 +36,12 @@ public class Attuatore {
      *
      * @param description the task content
      */
-    public Attuatore(String description, int stato, int locale_id ) {
+    public Attuatore(String description, int state, int manual,  int sensorId ) {
         this.id = 0;
-        this.descrizione = description;
-        this.stato = stato;
-        this.locale_id=locale_id;
+        this.description = description;
+        this.state = state;
+        this.manual = manual;
+        this.sensorId = sensorId;
     }
 
 
@@ -47,14 +50,15 @@ public class Attuatore {
     public int getId() {
         return id;
     }
-    public String getDescrizione() {
-        return descrizione;
+    public String getDescription() {
+        return description;
     }
-    public int getStato() {
-        return stato;
+    public int getState() {
+        return state;
     }
-    public int getlocale_id() {
-        return locale_id;
+    public int getManual() { return manual; }
+    public int getSensorId() {
+        return sensorId;
     }
 
 

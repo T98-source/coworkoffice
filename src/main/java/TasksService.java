@@ -56,7 +56,7 @@ public class TasksService {
             }
         });    //  <-
 
-        RESTUfficio.REST(gson, baseURL);
+        RESTLocale.REST(gson, baseURL);
         RESTPrenotazione.REST(gson, baseURL);
         RESTAttuatore.REST(gson, baseURL);
         RESTSensore.REST(gson, baseURL);
@@ -64,7 +64,7 @@ public class TasksService {
         RESTUtente.REST(gson, baseURL);
 
 
-        GestioneMisureLocaliMQTT subscriber = new GestioneMisureLocaliMQTT();
-        subscriber.start();
+        GestioneMisureLocaliMQTT gestioneMisureLocaliMQTT = new GestioneMisureLocaliMQTT();
+        gestioneMisureLocaliMQTT.MQTTInit();
     }
 }

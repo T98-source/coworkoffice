@@ -20,9 +20,9 @@ public class GestioneAttuatore {
      * @return a list of Actuator, or an empty list if no Actuators are available
      */
     public List<Attuatore> getAllActuators() {
-        final String sql = "SELECT id, descrizione, stato, locale_id FROM attuatori";
+        final String sql = "SELECT id, descrizione, stato, manuale, sensore_id FROM attuatori";
 
-        List<Attuatore> Actuators = new LinkedList<>();
+        List<Attuatore> actuators = new LinkedList<>();
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -32,8 +32,8 @@ public class GestioneAttuatore {
 
             while (rs.next()) {
 
-                Attuatore t = new Attuatore(rs.getInt("id"), rs.getString("descrizione"), rs.getInt("stato"),  rs.getInt("locale_id"));
-                Actuators.add(t);
+                Attuatore t = new Attuatore(rs.getInt("id"), rs.getString("descrizione"), rs.getInt("stato"), rs.getInt("manuale"), rs.getInt("sensore_id"));
+                actuators.add(t);
             }
 
             conn.close();
@@ -41,7 +41,30 @@ public class GestioneAttuatore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Actuators;
+        return actuators;
+    }
+
+    public Attuatore getActuatorsOfSensor(int sensorId)
+    {
+        final String sql = "SELECT id, descrizione, stato, manuale FROM attuatori WHERE sensore_id = ?";
+        Attuatore actuator = null;
+        try {
+            Connection conn = DBConnect.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, sensorId);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                actuator = new Attuatore(rs.getInt("id"), rs.getString("descrizione"), rs.getInt("stato"), rs.getInt("manuale"), sensorId);
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actuator;
     }
 
     /**
@@ -51,8 +74,8 @@ public class GestioneAttuatore {
      */
     public Attuatore getActuator(int id)
     {
-        Attuatore Actuator = null;
-        final String sql = "SELECT id, descrizione stato, locale_id FROM attuatori WHERE id = ?";
+        Attuatore actuator = null;
+        final String sql = "SELECT id, descrizione, stato, manuale, sensore_id FROM attuatori WHERE id = ?";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -62,7 +85,7 @@ public class GestioneAttuatore {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                Actuator = new Attuatore(id, rs.getString("descrizione"), rs.getInt("stato"),  rs.getInt("locale_id"));
+                actuator = new Attuatore(id, rs.getString("descrizione"), rs.getInt("stato"), rs.getInt("manuale"), rs.getInt("sensore_id"));
             }
 
             conn.close();
@@ -70,7 +93,7 @@ public class GestioneAttuatore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Actuator;
+        return actuator;
     }
 
     /**
@@ -78,14 +101,15 @@ public class GestioneAttuatore {
      * @param newActuator the Actuator to be added
      */
     public void addActuator(Attuatore newActuator) {
-        final String sql = "INSERT INTO attuatori (descrizione, stato, locale_id) VALUES (?,?,?)";
+        final String sql = "INSERT INTO attuatori (descrizione, stato, manuale, sensore_id) VALUES (?,?,?,?)";
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, newActuator.getDescrizione());
-            st.setInt(2, newActuator.getStato());
-            st.setInt(3, newActuator.getlocale_id());
+            st.setString(1, newActuator.getDescription());
+            st.setInt(2, newActuator.getState());
+            st.setInt(3, newActuator.getManual());
+            st.setInt(4, newActuator.getSensorId());
 
 
             st.executeUpdate();

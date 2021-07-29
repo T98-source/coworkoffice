@@ -8,21 +8,21 @@ public class Sensore {
     // the unique id of the sensor
     private int id;
 
-    private String descrizione;
+    private String description;
 
-    private int locale_id;
+    private int localId;
 
 
     /**
      * sensor main constructor.
      *
      * @param id represents the sensor unique identifier
-     * @param descrizione the sensor description
+     * @param description the sensor description
      */
-    public Sensore(int id, String descrizione, int locale_id) {
+    public Sensore(int id, String description, int localId) {
         this.id = id;
-        this.descrizione = descrizione;
-        this.locale_id = locale_id;
+        this.description = description;
+        this.localId = localId;
     }
 
 
@@ -31,10 +31,10 @@ public class Sensore {
      *
      * @param description the task content
      */
-    public Sensore(String description, int locale_id) {
+    public Sensore(String description, int localId) {
         this.id = 0;
-        this.descrizione = description;
-        this.locale_id = locale_id;
+        this.description = description;
+        this.localId = localId;
     }
 
 
@@ -44,11 +44,11 @@ public class Sensore {
         return id;
     }
 
-    public String getDescrizione() {
-        return descrizione;
+    public String getDescription() {
+        return description;
     }
-    public int getlocale_id() {
-        return locale_id;
+    public int getLocalId() {
+        return localId;
     }
 
 }

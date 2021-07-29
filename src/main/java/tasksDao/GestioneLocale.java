@@ -1,8 +1,7 @@
 package tasksDao;
 
 import spark.QueryParamsMap;
-import tasks.Prenotazione;
-import tasks.Ufficio;
+import tasks.Locale;
 import utils.DBConnect;
 
 import java.sql.Connection;
@@ -15,17 +14,40 @@ import java.util.List;
 /**
  * The DAO for the {@code Task} class.
  */
-public class GestioneUfficio {
+public class GestioneLocale {
 
+    public List<Locale> getAllLocals(QueryParamsMap queryParamsMap) {
+        final String sql = "SELECT id, descrizione, tipo FROM locali";
+
+        List<Locale> locals = new LinkedList<>();
+
+        try {
+            Connection conn = DBConnect.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Locale t = new Locale(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"));
+                locals.add(t);
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return where(queryParamsMap, locals);
+    }
     /**
      * Get all offices from the DB
      * @return a list of office, or an empty list if no offices are available
      * @param queryParamsMap
      */
-    public List<Ufficio> getAllOffices(QueryParamsMap queryParamsMap) {
+    public List<Locale> getAllOffices(QueryParamsMap queryParamsMap) {
         final String sql = "SELECT id, descrizione, tipo FROM locali WHERE tipo = 'ufficio'";
 
-        List<Ufficio> offices = new LinkedList<>();
+        List<Locale> offices = new LinkedList<>();
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -35,7 +57,7 @@ public class GestioneUfficio {
 
             while (rs.next()) {
 
-                Ufficio t = new Ufficio(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"));
+                Locale t = new Locale(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"));
                 offices.add(t);
             }
 
@@ -47,25 +69,33 @@ public class GestioneUfficio {
         return where(queryParamsMap, offices);
     }
 
-    private List<Ufficio> where(QueryParamsMap queryParamsMap, List<Ufficio> offices){
+    private List<Locale> where(QueryParamsMap queryParamsMap, List<Locale> locals){
         if(queryParamsMap.hasKey("description") && queryParamsMap.get("description").value().length() != 0){
-            for(int i = 0; i<offices.size(); i++){
-                if(!offices.get(i).getDescription().toLowerCase().contains(queryParamsMap.get("description").value().toLowerCase())) {
-                    offices.remove(i);
+            for(int i = 0; i<locals.size(); i++){
+                if(!locals.get(i).getDescription().toLowerCase().contains(queryParamsMap.get("description").value().toLowerCase())) {
+                    locals.remove(i);
                     i--;
                 }
             }
         }
-        return offices;
+        if(queryParamsMap.hasKey("type") && queryParamsMap.get("type").value().length() != 0){
+            for(int i = 0; i<locals.size(); i++){
+                if(!locals.get(i).getDescription().toLowerCase().contains(queryParamsMap.get("type").value().toLowerCase())) {
+                    locals.remove(i);
+                    i--;
+                }
+            }
+        }
+        return locals;
     }
     /**
      * Get a single task from the DB
      * @param id of the task to retrieve
      * @return the office, or null if not found
      */
-    public Ufficio getOffice(int id)
+    public Locale getOffice(int id)
     {
-        Ufficio office = null;
+        Locale office = null;
         final String sql = "SELECT descrizione, tipo FROM locali WHERE id = ?";
 
         try {
@@ -76,7 +106,7 @@ public class GestioneUfficio {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                office = new Ufficio(id, rs.getString("descrizione"),rs.getString("tipo"));
+                office = new Locale(id, rs.getString("descrizione"),rs.getString("tipo"));
             }
 
             conn.close();
@@ -91,7 +121,7 @@ public class GestioneUfficio {
      * Add a new task into the DB
      * @param newOffice the office to be added
      */
-    public void addOffice(Ufficio newOffice) {
+    public void addOffice(Locale newOffice) {
         final String sql = "INSERT INTO locali(descrizione,tipo) VALUES (?,?)";
 
         try {

@@ -1,7 +1,6 @@
 package RESTService;
 
 import com.google.gson.Gson;
-import spark.QueryParamsMap;
 import tasks.Prenotazione;
 import taskModelsJSGrid.Slot;
 import tasksDao.GestionePrenotazione;
@@ -38,8 +37,6 @@ public class RESTPrenotazione {
                 else
                     return halt(401);
 
-                Map<String, List<Prenotazione>> finalJson = new HashMap<>();
-                finalJson.put("Reservations", allReservations);
                 return allReservations;
 
             }, gson::toJson);

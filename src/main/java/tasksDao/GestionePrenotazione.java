@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.sql.Date;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * The DAO for the {@code Task} class.
@@ -89,7 +87,7 @@ public class GestionePrenotazione {
     }
 
     private List<Prenotazione> where(QueryParamsMap queryParamsMap, List<Prenotazione> reservations){
-        if(queryParamsMap.hasKey("date") && queryParamsMap.get("date").value().length() != 0){
+        if(queryParamsMap.hasKey("date")){
             for(int i = 0; i<reservations.size(); i++){
                 if(!reservations.get(i).getDate().toLowerCase().contains(queryParamsMap.get("date").value().toLowerCase())){
                     reservations.remove(i);

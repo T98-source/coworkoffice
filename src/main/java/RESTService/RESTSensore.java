@@ -18,7 +18,7 @@ public class RESTSensore {
 
     public static void REST(Gson gson, String baseURL){
 
-        GestioneSensore SensorDao = new GestioneSensore();
+        GestioneSensore sensorDao = new GestioneSensore();
 
         // get all the tasks
         get(baseURL + "/sensors", (request, response) -> {
@@ -27,10 +27,7 @@ public class RESTSensore {
             response.status(200);
 
             // get all tasks from the DB
-            List<Sensore> allSensors = SensorDao.getAllSensors();
-            // prepare the JSON-related structure to return
-            Map<String, List<Sensore>> finalJson = new HashMap<>();
-            finalJson.put("sensors", allSensors);
+            List<Sensore> allSensors = sensorDao.getAllSensors();
 
             return allSensors;
         }, gson::toJson);
@@ -39,16 +36,16 @@ public class RESTSensore {
         // get a single task
         get(baseURL + "/sensors/:id", "application/json", (request, response) -> {
             // get the id from the URL
-            Sensore Sensor = SensorDao.getSensor(Integer.valueOf(request.params(":id")));
+            Sensore sensor = sensorDao.getSensor(Integer.valueOf(request.params(":id")));
 
             // no task? 404!
-            if(Sensor==null)
+            if(sensor==null)
                 halt(404);
 
             // prepare the JSON-related structure to return
             // and the suitable HTTP response code and type
             Map<String, Sensore> finalJson = new HashMap<>();
-            finalJson.put("Sensor", Sensor);
+            finalJson.put("Sensor", sensor);
             response.status(200);
             response.type("application/json");
 
@@ -68,7 +65,7 @@ public class RESTSensore {
 
                 // add the task into the DB
                 sensore = new Sensore(descrizione, locale_id);
-                SensorDao.addSensor(sensore);
+                sensorDao.addSensor(sensore);
 
                 // if success, prepare a suitable HTTP response code
                 response.status(201);
@@ -87,7 +84,7 @@ public class RESTSensore {
                 if(request.params(":id")!=null) {
 
                     // add the task into the DB
-                    SensorDao.deleteSensor(Integer.parseInt(String.valueOf(request.params(":id"))));
+                    sensorDao.deleteSensor(Integer.parseInt(String.valueOf(request.params(":id"))));
                     response.status(201);
 
                 }

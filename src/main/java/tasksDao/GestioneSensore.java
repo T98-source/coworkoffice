@@ -22,7 +22,7 @@ public class GestioneSensore {
     public List<Sensore> getAllSensors() {
         final String sql = "SELECT id, descrizione, locale_id FROM sensori";
 
-        List<Sensore> Sensors = new LinkedList<>();
+        List<Sensore> sensors = new LinkedList<>();
 
         try {
             Connection conn = DBConnect.getInstance().getConnection();
@@ -32,8 +32,8 @@ public class GestioneSensore {
 
             while (rs.next()) {
 
-                Sensore t = new Sensore(rs.getInt("id"), rs.getString("descrizione"),rs.getInt("locale_id"));
-                Sensors.add(t);
+                Sensore sensor = new Sensore(rs.getInt("id"), rs.getString("descrizione"),rs.getInt("locale_id"));
+                sensors.add(sensor);
             }
 
             conn.close();
@@ -41,7 +41,7 @@ public class GestioneSensore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Sensors;
+        return sensors;
     }
 
     /**
@@ -51,7 +51,7 @@ public class GestioneSensore {
      */
     public Sensore getSensor(int id)
     {
-        Sensore Sensor = null;
+        Sensore sensor = null;
         final String sql = "SELECT descrizione, locale_id FROM sensori WHERE id = ?";
 
         try {
@@ -62,7 +62,7 @@ public class GestioneSensore {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                Sensor = new Sensore(id, rs.getString("descrizione"),rs.getInt("locale_id"));
+                sensor = new Sensore(id, rs.getString("descrizione"),rs.getInt("locale_id"));
             }
 
             conn.close();
@@ -70,7 +70,31 @@ public class GestioneSensore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return Sensor;
+        return sensor;
+    }
+
+    public Sensore getSensorOfLocal(int localId)
+    {
+        Sensore sensor = null;
+        final String sql = "SELECT id, descrizione, locale_id FROM sensori WHERE locale_id = ?";
+
+        try {
+            Connection conn = DBConnect.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, localId);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                sensor = new Sensore(rs.getInt("id"), rs.getString("descrizione"), localId);
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sensor;
     }
 
     /**
@@ -83,8 +107,8 @@ public class GestioneSensore {
         try {
             Connection conn = DBConnect.getInstance().getConnection();
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, newSensor.getDescrizione());
-            st.setInt(2, newSensor.getlocale_id());
+            st.setString(1, newSensor.getDescription());
+            st.setInt(2, newSensor.getLocalId());
 
             st.executeUpdate();
 

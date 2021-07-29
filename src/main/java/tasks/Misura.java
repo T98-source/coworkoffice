@@ -16,13 +16,15 @@ public class Misura {
     // the unique id of the office
     private int id;
 
-    private String tipo;
+    private String type;
 
-    private String misurazione;
+    private String measurement;
 
-    private Timestamp data;
+    private String dateTime;
 
-    private int sensore_id;
+    private int sensorId;
+
+    private int localId;
 
 
 
@@ -30,28 +32,28 @@ public class Misura {
      * Waiting room main constructor.
      *
      * @param id represents the reservation unique identifier
-     * @param tipo the reservation description
      */
-    public Misura(int id, String tipo, String misurazione, Timestamp data, int sensore_id) {
+    public Misura(int id, String type, String measurement, String dateTime, int sensorId, int localId) {
         this.id = id;
-        this.tipo = tipo;
-        this.misurazione = misurazione;
-        this.data = data;
-        this.sensore_id = sensore_id;
+        this.type = type;
+        this.measurement = measurement;
+        this.dateTime = dateTime;
+        this.sensorId = sensorId;
+        this.localId = localId;
     }
 
 
     /**
      * Overloaded constructor. It create a reservation without a given id.
      *
-     * @param tipo the task content
      */
-    public Misura(String tipo, String misurazione, Timestamp data, int sensore_id) {
+    public Misura(String type, String measurement, String dateTime, int sensorId, int localId) {
         this.id = 0;
-        this.tipo = tipo;
-        this.misurazione = misurazione;
-        this.data = data;
-        this.sensore_id = sensore_id;
+        this.type = type;
+        this.measurement = measurement;
+        this.dateTime = dateTime;
+        this.sensorId = sensorId;
+        this.localId = localId;
     }
 
 
@@ -61,19 +63,19 @@ public class Misura {
         return id;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getType() {
+        return type;
     }
 
-    public String getMisurazione() {
-        return misurazione;
+    public String getMeasurement() {
+        return measurement;
     }
 
-    public Timestamp getdata() {
-        return data;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public int getsensore_id(){ return sensore_id; }
+    public int getSensorId(){ return sensorId; }
 
-
+    public int getLocalId(){ return localId; }
 }

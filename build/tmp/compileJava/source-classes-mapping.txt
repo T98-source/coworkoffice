@@ -1,50 +1,54 @@
 tasksDao/GestioneUtente.java
  tasksDao.GestioneUtente
-tasks/Ufficio.java
- tasks.Ufficio
-tasksDao/GestioneAttuatore.java
- tasksDao.GestioneAttuatore
 RESTService/RESTMisura.java
  RESTService.RESTMisura
-tasks/Utente.java
- tasks.Utente
-tasksDao/GestioneMisura.java
- tasksDao.GestioneMisura
-jwtToken/jwtlib/JWTfun.java
- jwtToken.jwtlib.JWTfun
-tasks/Attuatore.java
- tasks.Attuatore
-RESTService/RESTSensore.java
- RESTService.RESTSensore
-RESTService/RESTPrenotazione.java
- RESTService.RESTPrenotazione
-tasksDao/GestioneSensore.java
- tasksDao.GestioneSensore
-RESTService/RESTUtente.java
- RESTService.RESTUtente
-tasksDao/GestioneUfficio.java
- tasksDao.GestioneUfficio
-RESTService/RESTUfficio.java
- RESTService.RESTUfficio
-RESTService/RESTAttuatore.java
- RESTService.RESTAttuatore
-jwtToken/verifySignature.java
- jwtToken.verifySignature
-tasksDao/GestionePrenotazione.java
- tasksDao.GestionePrenotazione
-tasks/Prenotazione.java
- tasks.Prenotazione
-MQTT/SubscribeCallBack.java
- MQTT.SubscribeCallBack
-taskModelsJSGrid/Slot.java
- taskModelsJSGrid.Slot
 tasks/Misura.java
  tasks.Misura
-utils/DBConnect.java
- utils.DBConnect
+tasks/Utente.java
+ tasks.Utente
+RESTService/RESTUtente.java
+ RESTService.RESTUtente
+jwtToken/jwtlib/JWTfun.java
+ jwtToken.jwtlib.JWTfun
+RESTService/RESTAttuatore.java
+ RESTService.RESTAttuatore
+RESTService/RESTLocale.java
+ RESTService.RESTLocale
 tasks/Sensore.java
  tasks.Sensore
+tasksDao/GestionePrenotazione.java
+ tasksDao.GestionePrenotazione
+tasks/Locale.java
+ tasks.Locale
+utils/DBConnect.java
+ utils.DBConnect
+taskModelsJSGrid/Slot.java
+ taskModelsJSGrid.Slot
+tasksDao/GestioneAttuatore.java
+ tasksDao.GestioneAttuatore
+jwtToken/verifySignature.java
+ jwtToken.verifySignature
+tasksDao/GestioneLocale.java
+ tasksDao.GestioneLocale
+tasks/Prenotazione.java
+ tasks.Prenotazione
+tasksDao/GestioneMisura.java
+ tasksDao.GestioneMisura
+RESTService/RESTPrenotazione.java
+ RESTService.RESTPrenotazione
+tasks/Attuatore.java
+ tasks.Attuatore
 TasksService.java
  TasksService
+tasksDao/GestioneSensore.java
+ tasksDao.GestioneSensore
+RESTService/RESTSensore.java
+ RESTService.RESTSensore
+MQTT/subscriber/MQTTSubscriber.java
+ MQTT.subscriber.MQTTSubscriber
+MQTT/subscriber/SubscribeCallBack.java
+ MQTT.subscriber.SubscribeCallBack
 MQTT/GestioneMisureLocaliMQTT.java
  MQTT.GestioneMisureLocaliMQTT
+MQTT/publisher/MQTTPublisher.java
+ MQTT.publisher.MQTTPublisher
