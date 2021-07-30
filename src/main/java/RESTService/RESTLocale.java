@@ -61,6 +61,25 @@ public class RESTLocale {
             return finalJson;
         }, gson::toJson);
 
+        // get the living room
+        get(baseURL + "/livingroom/:tipo", "application/json", (request, response) -> {
+            // get the id from the URL
+            Locale livingroom = localDao.getLivingRoom(String.valueOf(request.params(":tipo")));
+
+            // no task? 404!
+            if(livingroom==null)
+                halt(404);
+
+            // prepare the JSON-related structure to return
+            // and the suitable HTTP response code and type
+            Map<String, Locale> finalJson = new HashMap<>();
+            finalJson.put("livingroom", livingroom);
+            response.status(200);
+            response.type("application/json");
+
+            return finalJson;
+        }, gson::toJson);
+
         // add a new task
         post(baseURL + "/offices", "application/json", (request, response) -> {
             {
@@ -68,12 +87,13 @@ public class RESTLocale {
                 Map addRequest = gson.fromJson(request.body(), Map.class);
                 Locale ufficio = null;
                 // check whether everything is in place
-                if (addRequest != null && addRequest.containsKey("descrizione")) {
+                if (addRequest != null && addRequest.containsKey("descrizione")&& addRequest.containsKey("num_posti")) {
                     String descrizione = String.valueOf(addRequest.get("descrizione"));
                     String tipo = "ufficio";
+                    int num_posti = Integer.parseInt(String.valueOf(addRequest.get("num_posti")));
 
                     // add the task into the DB
-                    ufficio = new Locale(descrizione, tipo);
+                    ufficio = new Locale(descrizione, tipo, num_posti);
                     localDao.addOffice(ufficio);
 
                     // if success, prepare a suitable HTTP response code

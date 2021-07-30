@@ -64,7 +64,5 @@ public class TasksService {
         RESTUtente.REST(gson, baseURL);
 
 
-        GestioneMisureLocaliMQTT gestioneMisureLocaliMQTT = new GestioneMisureLocaliMQTT();
-        gestioneMisureLocaliMQTT.MQTTInit();
     }
 }

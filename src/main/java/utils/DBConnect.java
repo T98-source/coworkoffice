@@ -10,8 +10,8 @@ import java.sql.SQLException;
 public class DBConnect {
     // the DB location (on file, inside the project)
     static private final String user = "root";
-    static private final String password = "Tm22311MAp;08La";
-    static private final String connString = "jdbc:mysql://localhost/coworkoffice";
+    static private final String password = "root";
+    static private final String connString = "jdbc:mysql://localhost:8889/coworkoffice";
 
     static private DBConnect instance = null;
     private DBConnect() {

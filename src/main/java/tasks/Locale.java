@@ -12,6 +12,8 @@ public class Locale {
 
     private String type;
 
+    private int num_posti;
+
 
     /**
      * Office main constructor.
@@ -19,7 +21,7 @@ public class Locale {
      * @param id represents the office unique identifier
      * @param description the office description
      */
-    public Locale(int id, String description, String type) {
+    public Locale(int id, String description, String type, int num_posti) {
         this.id = id;
         this.description = description;
         this.type = type;
@@ -31,7 +33,7 @@ public class Locale {
      *
      * @param description the task content
      */
-    public Locale(String description, String type) {
+    public Locale(String description, String type,  int num_posti) {
         this.id = 0;
         this.description = description;
         this.type = type;
@@ -49,6 +51,9 @@ public class Locale {
     }
     public String getType() {
         return type;
+    }
+    public int getNumPosti() {
+        return num_posti;
     }
 
 }

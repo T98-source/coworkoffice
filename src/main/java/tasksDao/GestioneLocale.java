@@ -17,7 +17,7 @@ import java.util.List;
 public class GestioneLocale {
 
     public List<Locale> getAllLocals(QueryParamsMap queryParamsMap) {
-        final String sql = "SELECT id, descrizione, tipo FROM locali";
+        final String sql = "SELECT id, descrizione, tipo, num_posti FROM locali";
 
         List<Locale> locals = new LinkedList<>();
 
@@ -28,7 +28,7 @@ public class GestioneLocale {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                Locale t = new Locale(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"));
+                Locale t = new Locale(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"),rs.getInt("num_posti"));
                 locals.add(t);
             }
 
@@ -57,7 +57,7 @@ public class GestioneLocale {
 
             while (rs.next()) {
 
-                Locale t = new Locale(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"));
+                Locale t = new Locale(rs.getInt("id"), rs.getString("descrizione"),rs.getString("tipo"),rs.getInt("num_posti"));
                 offices.add(t);
             }
 
@@ -106,7 +106,31 @@ public class GestioneLocale {
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
-                office = new Locale(id, rs.getString("descrizione"),rs.getString("tipo"));
+                office = new Locale(id, rs.getString("descrizione"),rs.getString("tipo"),rs.getInt("num_posti"));
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return office;
+    }
+
+    public Locale getLivingRoom(String tipo)
+    {
+        Locale office = null;
+        final String sql = "SELECT descrizione, tipo FROM locali WHERE tipo = ?";
+
+        try {
+            Connection conn = DBConnect.getInstance().getConnection();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, tipo);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                office = new Locale(rs.getString("descrizione"),rs.getString("tipo"),rs.getInt("num_posti"));
             }
 
             conn.close();
