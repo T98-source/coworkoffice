@@ -22,12 +22,12 @@ MQTT/GestioneMisureLocaliMQTT.java
  MQTT.GestioneMisureLocaliMQTT
 RESTService/RESTPrenotazione.java
  RESTService.RESTPrenotazione
-tasks/Locale.java
- tasks.Locale
+TasksService.java
+ TasksService
 tasksDao/GestioneSensore.java
  tasksDao.GestioneSensore
-tasksDao/GestioneLocale.java
- tasksDao.GestioneLocale
+RESTService/RESTUtente.java
+ RESTService.RESTUtente
 RESTService/RESTAttuatore.java
  RESTService.RESTAttuatore
 jwtToken/verifySignature.java
@@ -46,9 +46,9 @@ utils/DBConnect.java
  utils.DBConnect
 tasks/Sensore.java
  tasks.Sensore
-RESTService/RESTUtente.java
- RESTService.RESTUtente
-TasksService.java
- TasksService
+tasks/Locale.java
+ tasks.Locale
 RESTService/RESTLocale.java
  RESTService.RESTLocale
+tasksDao/GestioneLocale.java
+ tasksDao.GestioneLocale

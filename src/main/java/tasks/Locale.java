@@ -25,6 +25,7 @@ public class Locale {
         this.id = id;
         this.description = description;
         this.type = type;
+        this.num_posti = num_posti;
     }
 
 
@@ -37,6 +38,7 @@ public class Locale {
         this.id = 0;
         this.description = description;
         this.type = type;
+        this.num_posti = num_posti;
     }
 
 
